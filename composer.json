@@ -1,0 +1,27 @@
+{
+    "name": "darrenmerrett/ruf",
+    "description": "User framework",
+    "keywords": ["laravel"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Darren Merrett",
+            "email": "darren.merrett@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+		"tymon/jwt-auth": "0.5.*",
+        "barryvdh/laravel-cors": "0.8.x",
+        "aws/aws-sdk-php-laravel": "^3.0",
+        "league/flysystem-aws-s3-v3": "~1.0",
+        "intervention/image": "^2.3"
+	},
+	"require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "darrenmerrett\\ReactUserFramework\\": "src/"
+        }
+    }
+}

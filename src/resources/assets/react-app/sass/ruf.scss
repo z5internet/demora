@@ -1,0 +1,27 @@
+// Bootstrap overrides
+//
+// Copy variables from `_variables.scss` to this file to override default values
+// without modifying source files.
+
+// $gray-dark:                 #cc0000 !default;
+
+$enable-flex: true;
+
+$navbar-light-hover-color:#C31112;
+
+$brand-primary: #C31112 !default;
+
+$navbar-top-background: #c31112 !default;
+$navbar-bottom-background: #c31112 !default;
+ 
+$navbar-top-color: #fff;
+$navbar-top-active-color: #f3f3f3;
+$navbar-top-hover-color: #e2e2e2;
+
+$navbar-bottom-color: #fff;
+$navbar-bottom-active-color: #f3f3f3;
+$navbar-bottom-hover-color: #e2e2e2;
+
+@import "node_modules/bootstrap/scss/bootstrap.scss";
+
+@import "vendor/darrenmerrett/ruf/src/resources/assets/scss/scss.scss";

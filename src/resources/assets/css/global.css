@@ -1,0 +1,32 @@
+body {
+  padding-top:70px;
+  padding-bottom:70px;
+  margin: 0;
+  position:relative;
+  min-height:100vh;
+}
+
+.red {
+	color:#ac0101;
+}
+
+.navbar-nav > li.profile_image > a {
+	padding:5px;
+}
+
+.navbar-nav > li.profile_image > a img{
+	-webkit-border-radius: 8px 8px 8px 8px;
+	-moz-border-radius: 8px 8px 8px 8px;
+	border-radius: 8px 8px 8px 8px;
+	max-height:28px;
+}
+
+label.uploadButton input[type="file"] {
+    position: fixed;
+    top: -1000px;
+}
+
+.space {
+    height: 130px;
+    display: block;
+}

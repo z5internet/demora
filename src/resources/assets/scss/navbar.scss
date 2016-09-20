@@ -1,0 +1,71 @@
+.navbarTop {
+
+  background: $navbar-top-background;
+
+  .navbar-brand {
+    color: $navbar-top-active-color;
+
+    @include hover-focus {
+      color: $navbar-top-active-color;
+    }
+  }
+
+  .navbar-nav {
+    .nav-link {
+      color: $navbar-top-color;
+
+      @include hover-focus {
+        color: $navbar-top-hover-color;
+      }
+    }
+
+    .open > .nav-link,
+    .active > .nav-link,
+    .nav-link.open,
+    .nav-link.active {
+      @include plain-hover-focus {
+        color: $navbar-top-active-color;
+      }
+    }
+  }
+
+  .navbar-divider {
+    background-color: rgba(255,255,255,.075);
+  }
+}
+
+.navbarBottom {
+ 
+  background: $navbar-bottom-background;
+
+  .navbar-brand {
+    color: $navbar-bottom-active-color;
+
+    @include hover-focus {
+      color: $navbar-bottom-active-color;
+    }
+  }
+
+  .navbar-nav {
+    .nav-link {
+      color: $navbar-bottom-color;
+
+      @include hover-focus {
+        color: $navbar-bottom-hover-color;
+      }
+    }
+
+    .open > .nav-link,
+    .active > .nav-link,
+    .nav-link.open,
+    .nav-link.active {
+      @include plain-hover-focus {
+        color: $navbar-bottom-active-color;
+      }
+    }
+  }
+
+  .navbar-divider {
+    background-color: rgba(255,255,255,.075);
+  }
+}
