@@ -40,7 +40,7 @@ class build extends Command
 
         $args = $this->option('production')?' --production':'';
         
-        system("NODE_ENV=production webpack --config ./vendor/darrenmerrett/react-user-framework/src/webpack.config.js");
+        system("NODE_ENV=production webpack --config ./vendor/darrenmerrett/ruf/src/webpack.config.js");
 
         print "\n";
 
