@@ -7,20 +7,20 @@
 
 $enable-flex: true;
 
-$navbar-light-hover-color:#C31112;
+$navbar-light-hover-color:#f4f4f4;
 
-$brand-primary: #C31112 !default;
+$brand-primary: #000 !default;
 
-$navbar-top-background: #c31112 !default;
-$navbar-bottom-background: #c31112 !default;
+$navbar-top-background: #f7f7f9 !default;
+$navbar-bottom-background: #f7f7f9 !default;
  
-$navbar-top-color: #fff;
-$navbar-top-active-color: #f3f3f3;
-$navbar-top-hover-color: #e2e2e2;
+$navbar-top-color: #888;
+$navbar-top-active-color: #888;
+$navbar-top-hover-color: #000;
 
-$navbar-bottom-color: #fff;
-$navbar-bottom-active-color: #f3f3f3;
-$navbar-bottom-hover-color: #e2e2e2;
+$navbar-bottom-color: #888;
+$navbar-bottom-active-color: #888;
+$navbar-bottom-hover-color: #000;
 
 @import "node_modules/bootstrap/scss/bootstrap.scss";
 

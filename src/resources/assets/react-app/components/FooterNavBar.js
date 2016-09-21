@@ -20,9 +20,9 @@ class FooterNavBar extends Component {
   render() {
     return (
           <ul className="nav navbar-nav">
-            <li><Link to="/terms" style={styles.link} activeStyle={styles.activeLink}>Terms</Link></li>
-            <li><Link to="/privacy" style={styles.link} activeStyle={styles.activeLink}>Privacy</Link></li>
-            <li><Link to="/contact" style={styles.link} activeStyle={styles.activeLink}>Contact us</Link></li>
+            <li className="nav-item"><Link to="/terms" style={styles.link} activeStyle={styles.activeLink}>Terms</Link></li>
+            <li className="nav-item"><Link to="/privacy" style={styles.link} activeStyle={styles.activeLink}>Privacy</Link></li>
+            <li className="nav-item"><Link to="/contact" style={styles.link} activeStyle={styles.activeLink}>Contact us</Link></li>
           </ul>);
 
   }
