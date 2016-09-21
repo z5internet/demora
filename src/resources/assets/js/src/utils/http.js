@@ -8,34 +8,41 @@ var _errorModal = require('./errorModal');
 
 var _errorModal2 = _interopRequireDefault(_errorModal);
 
+var _config = require('../../../../../../../../../resources/assets/react-app/config');
+
+var _config2 = _interopRequireDefault(_config);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Http = {
 
-	get: function get(url, data, config) {
+	get: function get(url, data, fetchConfig) {
 
-		return DMFetch(url, 'GET', data, config);
+		return DMFetch(url, 'GET', data, fetchConfig);
 	},
-	post: function post(url, data, config) {
+	post: function post(url, data, fetchConfig) {
 
-		return DMFetch(url, 'POST', data, config);
+		return DMFetch(url, 'POST', data, fetchConfig);
 	},
-	put: function put(url, data, config) {
+	put: function put(url, data, fetchConfig) {
 
-		return DMFetch(url, 'PUT', data, config);
+		return DMFetch(url, 'PUT', data, fetchConfig);
 	},
-	delete: function _delete(url, data, config) {
+	delete: function _delete(url, data, fetchConfig) {
 
-		return DMFetch(url, 'DELETE', data, config);
+		return DMFetch(url, 'DELETE', data, fetchConfig);
 	}
 
 };
 
-function DMFetch(url, method, data, config) {
+function DMFetch(url, method, data, fetchConfig) {
 
-	if (!config) config = {};
+	if (!fetchConfig) fetchConfig = {};
 
-	url = 'http://playorange-react.app:8000' + url;
+	if (_config2.default && _config2.default.dataDomain) {
+
+		url = _config2.default.dataDomain + url;
+	}
 
 	var headers = {};
 
@@ -62,7 +69,7 @@ function DMFetch(url, method, data, config) {
 
 	}).then(function (response) {
 
-		if (config.returnResponse) {
+		if (fetchConfig.returnResponse) {
 
 			return response;
 		}
