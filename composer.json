@@ -1,0 +1,28 @@
+{
+    "name": "z5internet/ruf",
+    "description": "User framework",
+    "keywords": ["laravel"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Darren Merrett",
+            "email": "github@z5.ltd"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "tymon/jwt-auth": "1.0.*",
+        "intervention/image": "^2.3",
+        "ralouphie/getallheaders": "^2.0",
+        "nesbot/carbon": "^1.21",
+        "stripe/stripe-php": "^4.4",
+        "dfridrich/php-mime-type": "^2.0",
+        "illuminate/mail": "^5.4",
+        "graham-campbell/flysystem": "^3.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "z5internet\\ReactUserFramework\\": "src/"
+        }
+    }
+}

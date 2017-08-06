@@ -1,0 +1,1 @@
+"use strict";module.exports={path:"logout",getComponent:function(e,o){require.ensure([],function(){o(null,require("./components/Logout"))})}};

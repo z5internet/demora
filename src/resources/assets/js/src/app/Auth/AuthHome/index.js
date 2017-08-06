@@ -1,0 +1,1 @@
+"use strict";module.exports={path:"/home",getComponent:function(e,t){require.ensure([],function(){t(null,require("../../../../../../../../../../../resources/assets/react-app/components/AuthHome"))},"auth/home")}};

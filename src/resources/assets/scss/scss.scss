@@ -1,0 +1,33 @@
+@import "./navbar.scss";
+
+.cc-theme-ruf.cc-window {
+	border: 1px solid #fff;
+	border-color: $brand-primary;
+	background-color: #fff;
+}
+
+.cc-theme-ruf .cc-btn {
+	@extend .btn-primary;
+}
+
+.cc-floating.cc-theme-ruf {
+  padding: 1.2em;
+  border-radius: 5px;
+}
+
+.cc-floating.cc-type-info.cc-theme-ruf .cc-compliance {
+  text-align: center;
+  display: inline;
+  flex: none;
+}
+
+.cc-theme-ruf .cc-btn {
+  border-radius: 5px;
+}
+.cc-theme-ruf .cc-btn:last-child {
+  min-width: 140px;
+}
+
+.cc-floating.cc-type-info.cc-theme-ruf .cc-btn {
+  display: inline-block;
+}

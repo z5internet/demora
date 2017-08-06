@@ -1,0 +1,1 @@
+"use strict";function _interopRequireDefault(e){return e&&e.__esModule?e:{default:e}}var _App=require("../components/App.js"),_App2=_interopRequireDefault(_App);module.exports={childRoutes:[{path:"/",component:_App2.default,childRoutes:[require("./Auth/Routes"),require("./NoAuth/Routes")]}]};

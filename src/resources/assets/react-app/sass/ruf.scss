@@ -1,0 +1,27 @@
+// Bootstrap overrides
+//
+// Copy variables from `_variables.scss` to this file to override default values
+// without modifying source files.
+
+// $gray-dark:                 #cc0000 !default;
+
+$enable-flex: true;
+
+$navbar-light-hover-color:#f4f4f4;
+
+$brand-primary: #000 !default;
+
+$navbar-top-background: #ADD8E6 !default;
+$navbar-bottom-background: #ADD8E6 !default;
+
+$navbar-top-color: #888;
+$navbar-top-active-color: #888;
+$navbar-top-hover-color: #000;
+
+$navbar-bottom-color: #888;
+$navbar-bottom-active-color: #888;
+$navbar-bottom-hover-color: #000;
+
+@import "node_modules/bootstrap/scss/bootstrap.scss";
+
+@import "vendor/z5internet/ruf/src/resources/assets/scss/scss.scss";

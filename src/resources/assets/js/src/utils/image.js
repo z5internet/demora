@@ -1,0 +1,1 @@
+"use strict";module.exports=function(e,u){return e.u?e.p+u+"-"+e.u+"-"+e.m+"."+e.e:require("../../../../images/blank"+u+".png")};

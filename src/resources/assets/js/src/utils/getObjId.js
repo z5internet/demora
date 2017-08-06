@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=function(e){var t=e.split("-"),r=t[2],n=t.slice(0,2).join("-"),o=t[3],a=e;t[3]&&(r=t[3],o=t[2],a=n+"-"+o);var p={};return p.rootObj=n,p.id=r,p.obj=e,p.parentId=0,p.parentObj="",o&&(p.parentId=o,p.parentObj=a),p};
