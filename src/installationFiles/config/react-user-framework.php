@@ -16,6 +16,10 @@ return [
 			'pluralLabel' => 'Companies',
 			'allowMultiUsers' => true,
 		],
+
+		'cors' => [
+			'domains' => [],
+		],
 **/
 
 	],

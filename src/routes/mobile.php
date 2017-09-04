@@ -25,8 +25,6 @@ $this->route->group(['prefix' => 'mobile'], function () {
 
 		});
 
-		$this->route->post('/push', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesAuthController@push');
-
 		$this->route->get('/uiNotifications', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesAuthController@uiNotifications');
 		$this->route->put('/uiNotifications/{nid}', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesAuthController@markUiNotificationAsRead');
 

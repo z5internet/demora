@@ -14,8 +14,6 @@ use z5internet\ReactUserFramework\App\Http\Controllers\Image\ImageController;
 
 use z5internet\ReactUserFramework\App\Http\Controllers\ErrorLogController;
 
-use z5internet\ReactUserFramework\App\Http\Controllers\PushController;
-
 use z5internet\ReactUserFramework\App\Http\Controllers\AssetController;
 
 use z5internet\ReactUserFramework\App\Http\Controllers\uiNotificationsController;
@@ -27,6 +25,8 @@ use z5internet\ReactUserFramework\App\Http\Controllers\User\ForgotPasswordContro
 use z5internet\ReactUserFramework\App\Http\Controllers\Image\UploadImageController;
 
 use z5internet\ReactUserFramework\App\Http\Controllers\Auth\AuthenticationController;
+
+use Symfony\Component\HttpFoundation\Cookie;
 
 class routesController extends Controller
 {
@@ -90,9 +90,40 @@ class routesController extends Controller
 			'u' => $refer,
 		];
 
-		$response = new \Illuminate\Http\Response(file_get_contents(public_path('assets/index.html')));
+		$response = new \Illuminate\Http\Response(file_get_contents(base_path('public/assets/index.html')));
 
-		$response->withCookie(cookie('sou', json_encode($sou), 60*24*30));
+		$cookieSettings = config('react-user-framework.website.cookie');
+
+		$domain = array_get($cookieSettings, 'domain')?$cookieSettings['domain']:$this->request->getHttpHost();
+
+		$existing_cookie = json_decode(array_get($_COOKIE, 'sou'), true);
+
+		if (is_array($existing_cookie)) {
+
+			if ($sou['u'] && $sou['u'] == array_get($existing_cookie, 'u')) {
+
+				if ($sou['r'] && preg_match('~^'.config('app.url').'~', $sou['r'])) {
+
+					$sou['r'] == $existing_cookie['u'];
+
+				}
+				else
+				{
+
+					$sou['r'] = $existing_cookie['r'];
+
+				}
+
+			}
+
+		}
+
+		$response->withCookie(new Cookie(
+			'sou',
+			json_encode($sou),
+		    time()+(60*60*24*365),
+		    '/'
+		));
 
 		return $response;
 
@@ -143,14 +174,6 @@ class routesController extends Controller
 		(new ErrorLogController)->LogError($data);
 
 		return ['data' => []];
-
-	}
-
-	public function push(PushController $PushController) {
-
-		$args = $this->request->only('c', 'p', 'l');
-
-		return ['data' => $PushController->get($args)];
 
 	}
 

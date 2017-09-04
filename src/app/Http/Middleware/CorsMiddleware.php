@@ -16,7 +16,7 @@ class CorsMiddleware
 
         $origin = $request->headers->get('Origin');
 
-		if ($origin <> $this->getURLFromConfig()) {
+		if (!in_array($origin, $this->getURLFromConfig())) {
 
 			abort(405);
 
@@ -29,7 +29,7 @@ class CorsMiddleware
 			// Adds headers to the response
 			$response->header('Access-Control-Allow-Methods', 'HEAD, GET, POST, PUT, PATCH, DELETE');
 			$response->header('Access-Control-Allow-Headers', $request->header('Access-Control-Request-Headers'));
-			$response->header('Access-Control-Allow-Origin', $this->getURLFromConfig());
+			$response->header('Access-Control-Allow-Origin', $origin);
 			$response->header('Access-Control-Allow-Credentials', 'true');
 
 		} else {
@@ -47,7 +47,21 @@ class CorsMiddleware
 
 	public function getURLFromConfig() {
 
-        return config('app.url');
+		$url = config('react-user-framework.website.cors.domains');
+
+		if (!$url) {
+
+			$url = config('app.url');
+
+		}
+
+		if (!is_array($url)) {
+
+			$url = [$url];
+
+		}
+
+		return $url;
 
 	}
 

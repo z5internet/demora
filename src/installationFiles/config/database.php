@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'cashjuice'),
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -46,26 +46,13 @@ return [
 
     'connections' => [
 
-        'cashjuice' => [
+        'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', 'dbserver.cdqqhwoyep4e.us-east-1.rds.amazonaws.com'),
+            'host' => env('DB_HOST', ''),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'cashjuice'),
-            'username' => env('DB_USERNAME', 'cashjuice'),
-            'password' => env('DB_PASSWORD', 'cashjuice'),
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix' => '',
-            'strict' => true,
-            'engine' => null,
-        ],
-        'cashjuice_stats' => [
-            'driver' => 'mysql',
-            'host' => env('DB_HOST', 'dbserver.cdqqhwoyep4e.us-east-1.rds.amazonaws.com'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE_stats', 'cashjuice_stats'),
-            'username' => env('DB_USERNAME', 'cashjuice'),
-            'password' => env('DB_PASSWORD', 'cashjuice'),
+            'database' => env('DB_DATABASE', ''),
+            'username' => env('DB_USERNAME', ''),
+            'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',

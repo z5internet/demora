@@ -1,6 +1,6 @@
 <?php
 
-namespace z5internet\ReactUserFramework\app\Console\Commands;
+namespace z5internet\ReactUserFramework\App\Console\Commands;
 
 use Illuminate\Console\Command;
 

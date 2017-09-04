@@ -4,8 +4,6 @@ var webpack = require('webpack')
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var config = require(__dirname+'/../../../../resources/assets/react-app/config.js');
-
 module.exports = {
 
   entry: {
@@ -79,7 +77,6 @@ module.exports = {
     })(),
     new ExtractTextPlugin("[name]-[chunkhash].css"),
     new HtmlWebpackPlugin({
-    	title: config.title,
     	appMountId:'appRoot',
     	mobile:true,
     	template: __dirname+'/resources/assets/template.html', // Load a custom template (ejs by default see the FAQ for details)

@@ -10,6 +10,10 @@ use Symfony\Component\HttpFoundation\Cookie;
 
 use Tymon\JWTAuth\Http\Parser\AuthHeaders;
 
+use z5internet\ReactUserFramework\App\Http\Controllers\Broadcast\BroadcastController;
+
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
 class AuthenticationController extends Controller {
 
 	private $request;
@@ -82,12 +86,14 @@ class AuthenticationController extends Controller {
 
 		$cookieSettings = config('react-user-framework.website.cookie');
 
+		$domain = array_get($cookieSettings, 'domain')?$cookieSettings['domain']:$this->request->getHttpHost();
+
 		return new Cookie(
 		    'rufT',
 		    $value?app('encrypter')->encrypt($value):'',
 		    time()+$cookieSettings['time'],
 		    '/',
-		    $cookieSettings['domain'],
+		    $domain,
 		    $cookieSettings['secure'],
 		    true
 		);

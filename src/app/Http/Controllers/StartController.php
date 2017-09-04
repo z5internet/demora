@@ -79,6 +79,9 @@ class StartController extends Controller {
 				'multiAccounts' => config('react-user-framework.website.multiAccounts'),
 				'menu' => $menu,
                 'stripe_key' => config('react-user-framework.pay.stripe.publishable_key'),
+                'livePusher' => [
+                	'app_id' => config('broadcasting.connections.livePusher.app_id'),
+                ],
 			],
 		];
 

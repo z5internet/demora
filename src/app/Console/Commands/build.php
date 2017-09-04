@@ -1,6 +1,6 @@
 <?php
 
-namespace z5internet\ReactUserFramework\app\Console\Commands;
+namespace z5internet\ReactUserFramework\App\Console\Commands;
 
 use Illuminate\Console\Command;
 
@@ -40,7 +40,7 @@ class build extends Command
 
         $node_env = $this->option('dev')?'':'NODE_ENV=production';
 
-        $dirs = [base_path('public/assets'), base_path('assets')];
+        $dirs = [base_path('assets'), base_path('public/assets')];
 
         if(!file_exists($dirs[0])) {
 

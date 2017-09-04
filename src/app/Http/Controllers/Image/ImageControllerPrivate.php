@@ -8,15 +8,15 @@ trait ImageControllerPrivate {
 
 	private function retrieveImage($img) {
 
-		try {
+//		try {
 
 			return app('flysystem')->connection('images')->read($img);
 
-		} catch (\Exception $e) {
+//		} catch (\Exception $e) {
 
-			return '';
+//			return '';
 
-		}
+//		}
 
 	}
 

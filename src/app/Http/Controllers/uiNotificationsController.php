@@ -6,9 +6,9 @@ use z5internet\ReactUserFramework\App\UiNotifications;
 
 use Carbon\Carbon;
 
-use z5internet\ReactUserFramework\App\Http\Controllers\PushController;
-
 use z5internet\ReactUserFramework\App\Http\Controllers\User\UserController;
+
+use z5internet\ReactUserFramework\App\Events\uiNotificationEvent;
 
 class uiNotificationsController extends Controller {
 
@@ -82,7 +82,16 @@ class uiNotificationsController extends Controller {
 
 		$notif->save();
 
-		(new PushController)->pushToUserChannel($notification->uid, 'uiNotifications', $notif->updated_at, $notif->updated_at);
+		$notification = [
+			'id' => $notification->id,
+			'b' => $notification->body,
+			'u' => $notification->uid,
+			'i' => $notification->image,
+			'l' => $notification->link,
+			't' => date('Y-m-d H:i:s'),
+		];
+
+		event(new uiNotificationEvent($notification));
 
 		return $notif;
 

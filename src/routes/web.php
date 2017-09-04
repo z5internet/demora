@@ -5,11 +5,13 @@ $routes = [
 	'/',
 	'/admin',
 	'/contact',
-	'/getStarted/{p?}',
+	'/getStarted',
+	'/getStarted/{p}',
 	'/home',
 	'/login',
 	'/privacy',
-	'/settings/{p?}',
+	'/settings',
+	'/settings/{p}',
 	'/setup',
 	'/setupExistingUser',
 	'/signup',
@@ -18,6 +20,10 @@ $routes = [
 ];
 
 $this->route->get('/logout', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@logoutWithRedirect');
+
+//	$this->route->post('/broadcasting/createToken', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\broadcastRoutes@createToken');
+
+$this->route->post('/broadcasting/auth', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\broadcastRoutes@authenticate');
 
 foreach ($routes as $tr) {
 
@@ -34,8 +40,6 @@ $this->route->get('/favicon.ico',function(){});
 if ($this->app instanceof \Laravel\Lumen\Application) {
 
 	$this->route->get('/{img:[^\/]*\-[^\/]*\-[^\/]*\.[a-z]{3,4}}', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\imagesRoutes@showImage');
-
-	$this->route->get('{refer:^[^/\.]*$}', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@referer');
 
 }
 else

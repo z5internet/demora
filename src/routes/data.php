@@ -32,8 +32,6 @@ $this->route->group(['prefix' => 'data'], function () {
 
 	$this->route->post('/log_error', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@logError');
 
-	$this->route->post('/push', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@push');
-
 });
 
 $this->route->group(['middleware' => 'auth'], function () {

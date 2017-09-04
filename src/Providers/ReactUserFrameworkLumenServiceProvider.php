@@ -31,6 +31,10 @@ class ReactUserFrameworkLumenServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/resources/views', 'react-user-framework');
 
+        class_alias('Pusher\Pusher', 'Pusher');
+
+        $this->extendBroadcast();
+
         $this->addRoutes();
 
         $this->registerMiddleware();
@@ -47,9 +51,11 @@ class ReactUserFrameworkLumenServiceProvider extends ServiceProvider
     public function register()
     {
 
-        require __DIR__.'/../app/Http/Controllers/Helpers.php';
+        require __DIR__.'/../App/Http/Controllers/Helpers.php';
 
         $this->mergeConfigFrom($this->configPath(), 'react-user-framework');
+
+        $this->app->configure('broadcasting');
 
         $this->app->configure('react-user-framework');
 
@@ -95,7 +101,9 @@ class ReactUserFrameworkLumenServiceProvider extends ServiceProvider
 
         $this->app->middleware('z5internet\ReactUserFramework\App\Http\Middleware\AddRufParameterToJSONOutput');
 
-        if (array_get($_SERVER, 'HTTP_ORIGIN')) {
+        $this->app->middleware('z5internet\ReactUserFramework\App\Http\Middleware\CheckForReferralURL');
+
+        if (array_get($_SERVER, 'HTTP_ORIGIN') && explode('/', array_get($_SERVER, 'HTTP_ORIGIN'))[2] <> $_SERVER['HTTP_HOST']) {
 
             $this->app->middleware(\z5internet\ReactUserFramework\App\Http\Middleware\CorsMiddleware::class);
 

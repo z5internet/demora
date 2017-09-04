@@ -41,6 +41,8 @@ class ReactUserFrameworkLaravelServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/resources/views', 'react-user-framework');
 
+        $this->extendBroadcast();
+
         $this->addRoutes();
 
         $kernel->pushMiddleware('z5internet\ReactUserFramework\App\Http\Middleware\AddRufParameterToJSONOutput');
@@ -52,6 +54,8 @@ class ReactUserFrameworkLaravelServiceProvider extends ServiceProvider
         }
 
         $kernel->pushMiddleware(\z5internet\ReactUserFramework\App\Http\Middleware\RefreshToken::class);
+
+        $kernel->pushMiddleware(\z5internet\ReactUserFramework\App\Http\Middleware\CheckForReferralURL::class);
 
         $this->registerCommands();
 
