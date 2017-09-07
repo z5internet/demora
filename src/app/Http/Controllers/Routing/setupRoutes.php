@@ -6,6 +6,8 @@ use z5internet\ReactUserFramework\App\Http\Controllers\SetupController;
 
 use z5internet\ReactUserFramework\App\Http\Controllers\Teams\TeamsController;
 
+use z5internet\ReactUserFramework\App\Http\Controllers\User\UserController;
+
 use Illuminate\Http\Request;
 
 class setupRoutes extends Controller
@@ -55,11 +57,23 @@ class setupRoutes extends Controller
 
 		];
 
-		return [
+		$st = [
 			'data' => [
-				'setup' => $setupController->completeSetup($data)
-			]
+				'setup' => $setupController->completeSetup($data),
+			],
 		];
+
+		if (!app('auth')->check()) {
+
+			return $st;
+
+		}
+
+		$user = app('auth')->user();
+
+		$token = app('tymon.jwt.auth')->fromUser($user);
+
+		return UserController::returnLoginHeaders($request, $token, $st);
 
 	}
 

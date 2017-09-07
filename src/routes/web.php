@@ -25,6 +25,8 @@ $this->route->get('/logout', 'z5internet\ReactUserFramework\App\Http\Controllers
 
 $this->route->post('/broadcasting/auth', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\broadcastRoutes@authenticate');
 
+$this->route->post('/mobile/broadcasting/auth', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\broadcastRoutes@authenticate');
+
 foreach ($routes as $tr) {
 
 	$this->route->get($tr,function() {

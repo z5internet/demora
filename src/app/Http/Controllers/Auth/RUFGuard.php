@@ -46,12 +46,45 @@ class RUFGuard implements Guard
         return $this->user = $user;
     }
 
-    /**
-     * Validate a user's credentials.
-     *
-     * @param  array  $credentials
-     * @return bool
-     */
+    public function loginUsingId($id, $remember = false)
+    {
+        if (! is_null($user = $this->provider->retrieveById($id))) {
+            $this->login($user, $remember);
+
+            return $user;
+        }
+
+        return false;
+    }
+
+    public function login($user, $remember = false)
+    {
+//        $this->updateSession($user->getAuthIdentifier());
+
+        // If the user should be permanently "remembered" by the application we will
+        // queue a permanent cookie that contains the encrypted copy of the user
+        // identifier. We will then decrypt this later to retrieve the users.
+        if ($remember) {
+//            $this->ensureRememberTokenIsSet($user);
+
+//            $this->queueRecallerCookie($user);
+        }
+
+        // If we have an event dispatcher instance set we will fire an event so that
+        // any listeners will hook into the authentication events and run actions
+        // based on the login and logout events fired from the guard instances.
+        $this->fireLoginEvent($user, $remember);
+
+        $this->setUser($user);
+    }
+
+    protected function fireLoginEvent($user, $remember = false)
+    {
+        if (isset($this->events)) {
+            $this->events->dispatch(new Events\Login($user, $remember));
+        }
+    }
+
     public function validate(array $credentials = [])
     {
         $this->lastAttempted = $user = $this->provider->retrieveByCredentials($credentials);

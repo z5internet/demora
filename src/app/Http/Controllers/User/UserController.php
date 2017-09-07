@@ -6,6 +6,8 @@ use z5internet\ReactUserFramework\App\Http\Controllers\StartController;
 
 use z5internet\ReactUserFramework\App\Http\Controllers\SetupController;
 
+use z5internet\ReactUserFramework\App\Http\Controllers\Auth\AuthenticationController;
+
 use Redirect;
 
 use z5internet\ReactUserFramework\App\Joined;
@@ -59,27 +61,53 @@ class UserController extends Controller {
 
 	public static function login($request) {
 
-        $credentials = $request->only('email', 'password');
+		$credentials = $request->only('email', 'password');
 
-        $user = User::where('email', $credentials['email'])->first();
+		$user = User::where('email', $credentials['email'])->first();
 
-        if (!$user) {
+		if (!app('hash')->check($credentials['password'], $user->password)) {
 
-        	return null;
+			return null;
 
-        }
+		}
 
-        app('auth')->setUser($user);
+		return self::doLoginFromUser($user);
 
-        if (!app('hash')->check($credentials['password'], $user->password)) {
+	}
 
-        	return null;
+	public static function loginUsingId($uid) {
 
-        }
+		$user = User::find($uid);
+
+		return self::doLoginFromUser($user);
+
+	}
+
+	private static function doLoginFromUser($user) {
+
+		if (!$user) {
+
+			return null;
+
+		}
+
+		app('auth')->setUser($user);
 
 		$user->token = app('tymon.jwt.auth')->fromUser($user);
 
 		return $user;
+
+	}
+
+	public static function returnLoginHeaders($request, $token, $content) {
+
+		$response = response('', 200);
+
+		$response->withCookie((new AuthenticationController($request))->cookie($token));
+
+		$response->setContent(collect($content));
+
+		return $response;
 
 	}
 
@@ -98,11 +126,11 @@ class UserController extends Controller {
 			$message	=	'We only accept referrals from other members. If you contact the member that told you about us, they can send you an invitiation';
 
 			return [
-				"errors"=>	[
+				'errors' => [
 					[
-						'message' => $message
-					]
-				]
+						'message' => $message,
+					],
+				],
 			];
 
 		}
@@ -116,9 +144,9 @@ class UserController extends Controller {
 			return [
 				'errors' =>	[
 					[
-						'message' => $message
-					]
-				]
+						'message' => $message,
+					],
+				],
 			];
 
 		}
@@ -192,7 +220,7 @@ class UserController extends Controller {
 			"email"			=>	$data['email'],
 			"link"			=>	config('app.url')."/setup?id=".$id."&code=".$code
 
-		);
+			);
 
 		app('mailer')->send($emailTemplate, $data, function($message) Use ($data) {
 
@@ -264,7 +292,7 @@ class UserController extends Controller {
 
 				$obj => self::getUser($obj),
 
-			]
+			],
 
 		];
 
@@ -299,8 +327,8 @@ class UserController extends Controller {
 
 		$out	=	[
 
-			"referrer"		=>	"",
-			"referred_url"	=>	""
+			'referrer' => '',
+			'referred_url' => '',
 
 		];
 
@@ -308,24 +336,23 @@ class UserController extends Controller {
 
 		if (is_array($cookie)) {
 
-			$cookie	=	$cookie	+ ["u"=>"","r"=>""];
+			$cookie	=	$cookie	+ ['u' => '', 'r' => ''];
 
-			if ($cookie["u"]) {
+			if ($cookie['u']) {
 
-				$rid	=	self::getIdFromUsername($cookie["u"]);
-
+				$rid = self::getIdFromUsername($cookie['u']);
 
 				if ($rid) {
 
-					$out["referrer"]	=	$rid;
+					$out['referrer'] = $rid;
 
 				}
 
 			}
 
-			if ($cookie["r"]) {
+			if ($cookie['r']) {
 
-				$out["referred_url"]	=	$cookie["r"];
+				$out['referred_url'] = $cookie['r'];
 
 			}
 
@@ -358,20 +385,20 @@ class UserController extends Controller {
 
 		}
 
-		$response					=	['data' => [
-			'user' => self::user()
-			]
-		];
+		$response = ['data' => [
+			'user' => self::user(),
+		]];
 
 		if ($token) {
 
-			$response["data"]["user"]["token"]	=	$token;
+			$response['data']['user']['token'] = $token;
 
 		}
 
 		return $response;
 
 	}
+
 /**
     public static function sendResetLinkEmail($data) {
 
@@ -426,7 +453,7 @@ class UserController extends Controller {
 
     }
 
-**/
+    **/
 
 /**
 	public static function resetPassword($data) {
@@ -474,5 +501,5 @@ class UserController extends Controller {
 		return ["success"	=>	"Your password has been changed."];
 
 	}
-**/
+	**/
 }

@@ -10,8 +10,6 @@ use Symfony\Component\HttpFoundation\Cookie;
 
 use Tymon\JWTAuth\Http\Parser\AuthHeaders;
 
-use z5internet\ReactUserFramework\App\Http\Controllers\Broadcast\BroadcastController;
-
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AuthenticationController extends Controller {
@@ -48,7 +46,7 @@ class AuthenticationController extends Controller {
 
 		    } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
 
-				$token = $AuthenticationController->refreshToken();
+				$token = $this->refreshToken();
 
 				$this->token = $token;
 
@@ -64,11 +62,13 @@ class AuthenticationController extends Controller {
 
 			$user = UserController::getUser($payload->get('sub'));
 
-			if ($user) {
+			if (!$user) {
 
-				$check = md5($user->password);
+				return;
 
 			}
+
+			$check = md5($user->password);
 
 			if (!$abc || ($abc != $check)) {
 

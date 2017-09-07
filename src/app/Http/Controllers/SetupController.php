@@ -184,7 +184,7 @@ class SetupController extends Controller
 
 		if ($uid) {
 
-			app('auth')->loginUsingId($uid);
+			UserController::loginUsingId($uid);
 
 			$team = 0;
 

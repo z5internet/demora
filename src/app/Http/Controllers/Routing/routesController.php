@@ -47,21 +47,15 @@ class routesController extends Controller
 
 		$user = UserController::login($this->request);
 
-		$response = response('', 200);
-
 		if (!$user) {
 
-			return ['data' => []];
+			return ['errors' => [['message' => 'Incorrect Login Details']]];
 
 		}
 
 		$st = (new StartController)->show($user->id)['user'];
 
-        $response->withCookie((new AuthenticationController($this->request))->cookie($user->token));
-
-		$response->setContent(collect(['data' => ['user' => $st]]));
-
-        return $response;
+		return UserController::returnLoginHeaders($this->request, $user->token, ['data' => ['user' => $st, 'token' => $user->token]]);
 
 	}
 

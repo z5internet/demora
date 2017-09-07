@@ -25,12 +25,12 @@ $this->route->group(['prefix' => 'mobile'], function () {
 
 		});
 
-		$this->route->get('/uiNotifications', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesAuthController@uiNotifications');
-		$this->route->put('/uiNotifications/{nid}', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesAuthController@markUiNotificationAsRead');
+		$this->route->get('/uiNotifications', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@uiNotifications');
+		$this->route->put('/uiNotifications/{nid}', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@markUiNotificationAsRead');
 
-		$this->route->post('/image/checkChunk', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesAuthController@checkImageChunkAlreadytUploaded');
+		$this->route->post('/image/checkChunk', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@checkImageChunkAlreadytUploaded');
 
-		$this->route->post('/image/uploadChunk', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesAuthController@uploadImageChunk');
+		$this->route->post('/image/uploadChunk', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@uploadImageChunk');
 
 	});
 
