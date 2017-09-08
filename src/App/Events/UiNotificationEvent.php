@@ -45,7 +45,7 @@ class UiNotificationEvent implements ShouldBroadcast {
 
 	public function broadcastOn()
     {
-        return new PrivateChannel('USER-'.$this->uiNotifications[$this->id]['u']);
+        return new PrivateChannel('USER_'.$this->uiNotifications[$this->id]['u']);
     }
 
     public function broadcastAs()

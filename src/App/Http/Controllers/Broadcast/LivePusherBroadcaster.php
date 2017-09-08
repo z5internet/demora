@@ -179,6 +179,26 @@ class LivePusherBroadcaster extends Broadcaster
 
         $socket = Arr::pull($payload, 'socket');
 
+        foreach($channels as $k => $channel_name) {
+
+            if (!Str::startsWith($channel_name, ['private-', 'presence-'])) {
+
+                continue;
+
+            }
+
+            $c = explode('-', (string) $channel_name);
+
+            if (count($c) <> 2) {
+
+                abort($channel_name . 'is not a valid channel');
+
+            }
+
+            $channels[$k] = join('-', [$c[0], config('broadcasting.connections.livePusher.app_id'), $c[1]]);
+
+        }
+
         $response = $this->pusher->trigger(
             $this->formatChannels($channels), $event, $payload, $socket, true
         );
