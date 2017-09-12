@@ -161,7 +161,7 @@ class ImageController extends Controller
 
 	}
 
-	private function putIntoStorage($filename, $image) {
+	public function putIntoStorage($filename, $image) {
 
 		app('flysystem')->connection('images')->put($filename, $image);
 
