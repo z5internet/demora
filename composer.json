@@ -10,18 +10,19 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "tymon/jwt-auth": "1.0.*",
-        "intervention/image": "^2.3",
-        "ralouphie/getallheaders": "^2.0",
-        "nesbot/carbon": "^1.21",
-        "stripe/stripe-php": "^4.4",
         "dfridrich/php-mime-type": "^2.0",
-        "illuminate/mail": "^5.4",
         "graham-campbell/flysystem": "^3.7",
-        "predis/predis": "^1.1",
+        "illuminate/mail": "5.4.*",
         "illuminate/redis": "5.4.*",
-        "pusher/pusher-php-server": "^3.0"
+        "illuminate/support": "5.4.*",
+        "intervention/image": "^2.3",
+        "nesbot/carbon": "^1.21",
+        "php": ">=5.4.0",
+        "predis/predis": "^1.1",
+        "pusher/pusher-php-server": "^3.0",
+        "ralouphie/getallheaders": "^2.0",
+        "stripe/stripe-php": "^4.4",
+        "tymon/jwt-auth": "1.0.*"
     },
     "autoload": {
         "psr-4": {

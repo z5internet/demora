@@ -84,19 +84,31 @@ class AuthenticationController extends Controller {
 
 	public function cookie($value) {
 
-		$cookieSettings = config('react-user-framework.website.cookie');
-
-		$domain = array_get($cookieSettings, 'domain')?$cookieSettings['domain']:$this->request->getHttpHost();
+		$cookieSettings = $this->getCookieSettings();
 
 		return new Cookie(
 		    'rufT',
 		    $value?app('encrypter')->encrypt($value):'',
 		    time()+$cookieSettings['time'],
 		    '/',
-		    $domain,
+		    $this->getDomain(),
 		    $cookieSettings['secure'],
 		    true
 		);
+
+	}
+
+	private function getCookieSettings() {
+
+		return config('react-user-framework.website.cookie');
+
+	}
+
+	private function getDomain() {
+
+		$cookieSettings = $this->getCookieSettings();
+
+		return array_get($cookieSettings, 'domain')?$cookieSettings['domain']:$this->request->getHttpHost();
 
 	}
 
@@ -162,7 +174,28 @@ class AuthenticationController extends Controller {
 
 		}
 
-		return $this->jwt->refresh();
+		try {
+
+			return $this->jwt->refresh();
+
+		} catch (\Exception $e) {
+
+			$cookieSettings = $this->getCookieSettings();
+
+			header('Location: /login');
+
+			setCookie(
+			    'rufT',
+				null,
+				-1,
+			    '/',
+			    $this->getDomain(),
+			    $cookieSettings['secure'],
+			    true
+			);
+			exit;
+
+		}
 
 	}
 
