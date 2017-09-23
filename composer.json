@@ -12,9 +12,9 @@
     "require": {
         "dfridrich/php-mime-type": "^2.0",
         "graham-campbell/flysystem": "^3.7",
-        "illuminate/mail": "5.4.*",
-        "illuminate/redis": "5.4.*",
-        "illuminate/support": "5.4.*",
+        "illuminate/mail": "5.5.*",
+        "illuminate/redis": "5.5.*",
+        "illuminate/support": "5.5.*",
         "intervention/image": "^2.3",
         "nesbot/carbon": "^1.21",
         "php": ">=5.4.0",
