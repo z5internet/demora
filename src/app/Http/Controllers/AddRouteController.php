@@ -12,17 +12,7 @@ class AddRouteController extends Controller {
 
     public function __call($method, $args) {
 
-        if ($this->app instanceof \Laravel\Lumen\Application) {
-
-            call_user_func_array([$this->app, $method], $args);
-
-        }
-        else
-        {
-
-            call_user_func_array([$this->app->router, $method], $args);
-
-        }
+        call_user_func_array([$this->app->router, $method], $args);
 
     }
 

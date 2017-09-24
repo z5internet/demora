@@ -11,17 +11,17 @@
     ],
     "require": {
         "dfridrich/php-mime-type": "^2.0",
-        "graham-campbell/flysystem": "^3.7",
+        "graham-campbell/flysystem": "^4.0",
         "illuminate/mail": "5.5.*",
         "illuminate/redis": "5.5.*",
         "illuminate/support": "5.5.*",
-        "intervention/image": "^2.3",
+        "intervention/image": "^2.4",
         "nesbot/carbon": "^1.21",
-        "php": ">=5.4.0",
+        "php": ">=7.0.0",
         "predis/predis": "^1.1",
         "pusher/pusher-php-server": "^3.0",
         "ralouphie/getallheaders": "^2.0",
-        "stripe/stripe-php": "^4.4",
+        "stripe/stripe-php": "^5.2",
         "tymon/jwt-auth": "1.0.*"
     },
     "autoload": {
