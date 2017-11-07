@@ -163,7 +163,7 @@ class routesController extends Controller
 
 	public function logError() {
 
-		$data = $this->request->only('stacktrace', 'url', 'uid', 'type');
+		$data = $this->request->only('stacktrace', 'url', 'uid', 'type')+['stacktrace' => '', 'url' => '', 'uid' => '', 'type' => ''];
 
 		(new ErrorLogController)->LogError($data);
 

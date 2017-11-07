@@ -3,6 +3,7 @@ var path = require('path')
 var webpack = require('webpack')
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 
@@ -60,6 +61,12 @@ module.exports = {
   },
 
   plugins: [
+    new CopyWebpackPlugin([
+      {
+        from: __dirname+'/resources/images/',
+        to: __dirname + '/../../../../public/assets/',
+      },
+    ]),
     new webpack.optimize.CommonsChunkPlugin('vendor','vendor-[chunkhash].js'),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')

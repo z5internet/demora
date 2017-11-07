@@ -10,16 +10,6 @@ use JWTAuth;
 
 class imagesRoutes extends Controller {
 
-	public function __construct(Request $request) {
-
-		if (!app('auth')->check()) {
-
-			abort(404, '');
-
-		}
-
-	}
-
 	public function showImage(ImageController $ImageController, $img) {
 
 		return (new ImageController)->get($img);

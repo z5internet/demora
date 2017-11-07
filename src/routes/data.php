@@ -63,7 +63,7 @@ $this->route->group(['middleware' => 'auth'], function () {
 
 		});
 
-		$this->route->group(['prefix' => 'admin'], function () {
+		$this->route->group(['prefix' => 'admin', 'middleware' => 'IsUserAWebsiteAdminMiddleware'], function () {
 
 			$this->route->group(['prefix' => 'products'], function () {
 

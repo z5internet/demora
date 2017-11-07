@@ -85,7 +85,7 @@ class ReactUserFrameworkLumenServiceProvider extends ServiceProvider
 
         $this->app->register(\GrahamCampbell\Flysystem\FlysystemServiceProvider::class);
 
-        $this->app['auth']->viaRequest('api', function ($request) {
+        $this->app['auth']->viaRequest('data', function ($request) {
 
             $user = (new AuthenticationController($request))->checkAuthentication();
 
@@ -110,6 +110,8 @@ class ReactUserFrameworkLumenServiceProvider extends ServiceProvider
         }
 
         $this->app->middleware(\z5internet\ReactUserFramework\App\Http\Middleware\RefreshToken::class);
+
+        $this->app->routeMiddleware(['IsUserAWebsiteAdminMiddleware' => \z5internet\ReactUserFramework\App\Http\Middleware\IsUserAWebsiteAdminMiddleware::class]);
 
     }
 
