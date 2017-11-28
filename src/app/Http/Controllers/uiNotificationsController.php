@@ -12,15 +12,23 @@ use z5internet\ReactUserFramework\App\Events\uiNotificationEvent;
 
 class uiNotificationsController extends Controller {
 
-	public function showNotifications($uid) {
+	public function showNotifications($uid, $endCursor) {
+
+		$limit = 20;
 
 		$notif = UiNotifications::where('u', $uid);
 
-		$notif = $notif->orderBy('updated_at', 'desc');
+		$notif = $notif->orderBy('id', 'desc');
 
-		$notif = $notif->take(20);
+		if ($endCursor <> 0) {
 
-		$notif = $notif->get(['id', 'u', 'i', 'b', 'r', 'l', app('db')->raw('updated_at as t')]);
+			$notif = $notif->where('id', '<', $endCursor);
+
+		}
+
+		$notif = $notif->take($limit);
+
+		$notif = $notif->get(['id', 'nid', 'u', 'i', 'b', 'r', 'l', app('db')->raw('updated_at as t')]);
 
 		$out = [];
 
@@ -30,7 +38,7 @@ class uiNotificationsController extends Controller {
 
 			$not->b = json_decode($not->b);
 
-			$out[$not->id] = $not;
+			$out[$not->nid] = $not;
 
 			$users[$not->u.'-u'] = 1;
 
@@ -46,7 +54,22 @@ class uiNotificationsController extends Controller {
 
 		}
 
-		$out = ['uiNotifications' => $out];
+		$endCursor = -1;
+
+		if ($notif->count() == $limit) {
+
+			$last = $notif->last();
+
+			$endCursor = $last->id;
+
+		}
+
+		$out = ['uiNotifications' => [
+
+			'notifications' => array_values($out),
+			'endCursor' => $endCursor,
+
+		]];
 
 		$out['users'] = [];
 

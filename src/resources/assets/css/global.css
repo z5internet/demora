@@ -12,17 +12,23 @@ body {
 
 @media (min-width: 576px) {
 
-  .navbar-nav > li.profile_image > a {
+  .nav > li.profile_image > a {
   	padding:5px;
   }
 
 }
 
-.navbar-nav > li.profile_image > a img{
+.nav > li.profile_image > a img{
 	-webkit-border-radius: 8px 8px 8px 8px;
 	-moz-border-radius: 8px 8px 8px 8px;
 	border-radius: 8px 8px 8px 8px;
 	max-height:28px;
+}
+
+.nav > li.profile_image .nav-link {
+
+  padding: 0.375rem;
+
 }
 
 label.uploadButton input[type="file"] {

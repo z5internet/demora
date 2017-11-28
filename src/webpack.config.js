@@ -9,7 +9,7 @@ module.exports = {
 
   entry: {
   	ruf:__dirname+'/resources/assets/js/src/index.js',
-    vendor: ['react','redux','react-redux'],
+    vendor: ['react', 'redux', 'react-redux', 'prop-types', 'react-router-dom', 'react-dom', 'cookieconsent'],
   },
 
   output: {
@@ -98,6 +98,7 @@ module.exports = {
     alias:{
       rufUtils: path.resolve( __dirname, './resources/assets/js/src/utils' ),
       TagBlock: path.resolve( __dirname, '../../ruf-tag/src/resources/assets/js/src/components/TagBlock'),
+      resources: path.resolve( __dirname, '../../../../resources'),
     },
     extensions: [ '', '.js' ]
   },

@@ -10,9 +10,11 @@
     }
   }
 
-  .navbar-nav {
+  .nav {
     .nav-link {
+
       color: $navbar-top-color;
+      padding: 0.5rem;
 
       @include hover-focus {
         color: $navbar-top-hover-color;
@@ -35,7 +37,7 @@
 }
 
 .navbarTop.topBarLoggedOut {
-  
+
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
@@ -44,7 +46,7 @@
 
 .navbarTop.topBarLoggedOut .navbar-nav {
 
-  flex-direction: row;  
+  flex-direction: row;
 
 }
 
@@ -56,7 +58,13 @@
 }
 
 .navbarBottom {
- 
+
+  width: 100vw;
+  margin-bottom: 0px;
+  bottom: 0px;
+  position: absolute;
+  z-index: 2;
+
   background: $navbar-bottom-background;
 
   .navbar-brand {

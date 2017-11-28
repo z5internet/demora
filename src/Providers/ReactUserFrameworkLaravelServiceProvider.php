@@ -99,7 +99,7 @@ class ReactUserFrameworkLaravelServiceProvider extends ServiceProvider
         $method = method_exists($router, 'aliasMiddleware') ? 'aliasMiddleware' : 'middleware';
         $router->$method('auth', \z5internet\ReactUserFramework\App\Http\Middleware\Authenticate::class);
 
-        $kernel->$method('IsUserAWebsiteAdminMiddleware', \z5internet\ReactUserFramework\App\Http\Middleware\IsUserAWebsiteAdminMiddleware::class);
+        $router->$method('IsUserAWebsiteAdminMiddleware', \z5internet\ReactUserFramework\App\Http\Middleware\IsUserAWebsiteAdminMiddleware::class);
 
     }
 

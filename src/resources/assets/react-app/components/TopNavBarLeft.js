@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 class TopNavBarLeft extends Component {
 
   render() {
     return (
 
-        <ul className="nav navbar-nav navbar-left">       
+        <ul className="nav navbar-nav navbar-left">
           <li className="nav-item">
             <Link
               to="/"

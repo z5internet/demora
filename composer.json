@@ -22,7 +22,8 @@
         "pusher/pusher-php-server": "^3.0",
         "ralouphie/getallheaders": "^2.0",
         "stripe/stripe-php": "^5.2",
-        "tymon/jwt-auth": "1.0.*"
+        "tymon/jwt-auth": "1.0.*",
+        "doctrine/dbal": "^2.6"
     },
     "autoload": {
         "psr-4": {

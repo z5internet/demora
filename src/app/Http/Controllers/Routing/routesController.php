@@ -163,7 +163,7 @@ class routesController extends Controller
 
 	public function logError() {
 
-		$data = $this->request->only('stacktrace', 'url', 'uid', 'type')+['stacktrace' => '', 'url' => '', 'uid' => '', 'type' => ''];
+		$data = $this->request->only('stacktrace', 'url', 'type')+['stacktrace' => '', 'url' => '', 'type' => ''];
 
 		(new ErrorLogController)->LogError($data);
 
@@ -171,12 +171,14 @@ class routesController extends Controller
 
 	}
 
-	public function uiNotifications() {
+	public function uiNotifications(Request $request) {
 
 		$uid = app('auth')->id();
 
+		$endCursor = $request->input('endCursor');
+
 		return [
-			'data' => (new uiNotificationsController)->showNotifications($uid),
+			'data' => (new uiNotificationsController)->showNotifications($uid, $endCursor),
 		];
 
 	}

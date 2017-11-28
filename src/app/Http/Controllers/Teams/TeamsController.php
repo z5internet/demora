@@ -29,7 +29,9 @@ class TeamsController extends Controller {
 		$uid = app('auth')->id();
 
 		if ($team >0 && $this->isUserAMemberOfTeam($uid, $team)) {
-			return $team;
+
+			return (int) $team;
+
 		}
 
 		if ($team > 0) {

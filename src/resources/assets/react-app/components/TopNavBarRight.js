@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const dark = 'hsl(200, 20%, 20%)'
 const light = '#fff'
@@ -22,7 +22,7 @@ class TopNavBarRight extends Component {
 		return (
               <ul className="nav navbar-nav navbar-right">
 
-              </ul>    
+              </ul>
         );
 
 	}

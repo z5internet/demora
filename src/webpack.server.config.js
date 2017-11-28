@@ -88,6 +88,7 @@ module.exports = {
     alias:{
       rufUtils: path.resolve( __dirname, './resources/assets/js/src/utils' ),
       TagBlock: path.resolve( __dirname, '../../ruf-tag/src/resources/assets/js/src/components/TagBlock'),
+      resources: path.resolve( __dirname, '../../../../resources'),
     },
     extensions: [ '', '.js' ]
   },

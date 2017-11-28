@@ -27,6 +27,7 @@ class migrations
             'create_invoice_detail_table',
             'create_push_table',
             'add_foreign_key_to_password_resets_table',
+            'alter_notifications_id',
         ];
 
         if (!file_exists(database_path('migrations/2016_01_01_000000_'.$migrationFiles[0].'.php'))) {
