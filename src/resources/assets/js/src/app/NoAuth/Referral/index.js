@@ -1,1 +1,0 @@
-"use strict";module.exports={path:"/:referer",getComponent:function(e,r){require.ensure([],function(){r(null,require("./components/Referral"))})}};

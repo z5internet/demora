@@ -1,0 +1,58 @@
+.notifications {
+
+	.notification_item {
+
+		width: 100%!important;
+		font-size: 14px;
+		display: flex;
+		flex-direction: row;
+
+		padding: 6px 30px 5px 12px!important;
+
+		border-bottom: 1px solid #dddfe2;
+	    overflow: hidden;
+
+		&.unread {
+
+			background-color: #edf2fa;
+
+		}
+
+		img {
+
+			height:48px;
+			width:48px;
+			margin-right:12px;
+			border-radius: 50%;
+
+		}
+
+		.notification-body {
+
+			white-space: normal;
+			font-size: 12px;
+			line-height: 16px;
+
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+
+			min-height: 50px;
+
+		}
+
+		.notification-time {
+
+			color: #90949c;
+
+		}
+
+		.notification-message a {
+
+			font-weight: bold;
+
+		}
+
+	}
+
+}

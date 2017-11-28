@@ -1,1 +1,0 @@
-"use strict";module.exports={path:"setup",getComponent:function(e,t){require.ensure([],function(){t(null,require("./components/Setup"))})}};

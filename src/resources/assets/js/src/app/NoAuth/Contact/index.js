@@ -1,1 +1,0 @@
-"use strict";module.exports={childRoutes:[{path:"/contact",getComponent:function(t,e){require.ensure([],function(){e(null,require("./components/Contact"))})}}]};
