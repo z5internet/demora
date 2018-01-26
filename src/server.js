@@ -8,7 +8,7 @@ var WebpackConfig = require('./webpack.server.config')
 var app = express()
 
 app.use(webpackDevMiddleware(webpack(WebpackConfig), {
-  publicPath: '/__build__/',
+  publicPath: '/assets/',
   stats: {
     colors: true
   }

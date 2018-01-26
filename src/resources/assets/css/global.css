@@ -78,3 +78,9 @@ label.uploadButton input[type="file"] {
     font-weight: bold;
     margin-right: -50%;
 }
+
+.form-control.av-invalid ~ .invalid-feedback {
+
+  display: block;
+
+}

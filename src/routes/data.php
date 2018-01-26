@@ -12,8 +12,6 @@ $this->route->group(['prefix' => 'data'], function () {
 
 	$this->route->post('/password/reset', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@resetPassword');
 
-	$this->route->post('/referer', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@referer');
-
 	$this->route->get('/auth/logout', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@logout');
 
 	$this->route->get('/start', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@start');

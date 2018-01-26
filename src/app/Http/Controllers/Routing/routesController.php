@@ -84,8 +84,6 @@ class routesController extends Controller
 			'u' => $refer,
 		];
 
-		$response = new \Illuminate\Http\Response(file_get_contents(base_path('public/assets/index.html')));
-
 		$cookieSettings = config('react-user-framework.website.cookie');
 
 		$domain = array_get($cookieSettings, 'domain')?$cookieSettings['domain']:$this->request->getHttpHost();
@@ -112,14 +110,12 @@ class routesController extends Controller
 
 		}
 
-		$response->withCookie(new Cookie(
+		return redirect('/')->withCookie(new Cookie(
 			'sou',
 			json_encode($sou),
 		    time()+(60*60*24*365),
 		    '/'
 		));
-
-		return $response;
 
 	}
 

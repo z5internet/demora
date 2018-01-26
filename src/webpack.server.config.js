@@ -3,18 +3,19 @@ var path = require('path')
 var webpack = require('webpack')
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 
   entry: {
-    ruf:__dirname+'/resources/assets/js/src/index.js'
+    ruf: __dirname+'/resources/assets/js/src/index.js',
   },
 
   output: {
-    path: __dirname + '/__build__/',
+    path: __dirname + '/assets/',
     filename: '[name].js',
     chunkFilename: '[id].js',
-    publicPath: '/__build__/'
+    publicPath: '/assets/'
   },
 
   module: {
@@ -79,6 +80,9 @@ module.exports = {
       }):function(){};
     })(),
     new ExtractTextPlugin("[name].css"),
+    new CopyWebpackPlugin([
+        {from: __dirname+'/resources/images', to: ''}
+    ]),
   ],
 
   devtool: process.env.NODE_ENV=='production'?null:'inline-source-map',

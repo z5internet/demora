@@ -11,7 +11,6 @@ class PayAdminController extends Controller {
 		$db = SubscribedPlans::where('product_id', $productId);
 
 		$db = $db->where('ends_at', '>', app('db')->raw('now()'));
-		$db = $db->where('invoice', '>', 0);
 
 		return $db->get();
 

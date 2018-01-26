@@ -38,6 +38,14 @@ class build extends Command
     public function handle()
     {
 
+        $rufJSONFile = base_path('storage/ruf.json');
+
+        $jsonConfig = [];
+
+        $jsonConfig['title'] = config('app.name');
+
+        file_put_contents($rufJSONFile, json_encode($jsonConfig));
+
         $node_env = $this->option('dev')?'':'NODE_ENV=production';
 
         $dirs = [base_path('assets'), base_path('public/assets')];
@@ -79,6 +87,8 @@ class build extends Command
             }
 
         }
+
+        unlink($rufJSONFile);
 
         print "\n";
 

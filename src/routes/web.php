@@ -21,8 +21,6 @@ $routes = [
 
 $this->route->get('/logout', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@logoutWithRedirect');
 
-//	$this->route->post('/broadcasting/createToken', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\broadcastRoutes@createToken');
-
 $this->route->post('/broadcasting/auth', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\broadcastRoutes@authenticate');
 
 $this->route->post('/mobile/broadcasting/auth', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\broadcastRoutes@authenticate');
@@ -48,8 +46,6 @@ else
 {
 
 	Route::get('/{img}', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\imagesRoutes@showImage')->where('img','[^\/]*\-[^\/]*\-[^\/]*\.[a-z]{3,4}');
-
-	Route::get('{refer}', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@referer')->where('refer', '^[^/\.]*$');
 
 }
 

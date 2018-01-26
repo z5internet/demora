@@ -53,11 +53,23 @@ class ImageController extends Controller
 
 		$size = $image[0];
 
-		if (!in_array($image[0],config('react-user-framework.images.sizes'))) {
+	    $stop = true;
 
-			return;
+	    foreach (config('react-user-framework.images.sizes') as $ti) {
 
-		}
+	        if ((string)$ti === (string)$size || (string)$size == "0") {
+
+	            $stop = false;
+
+	        }
+
+	    }
+
+	    if ($stop) {
+
+	        return;
+
+	    }
 
 		$image[0] = '0';
 
@@ -75,21 +87,59 @@ class ImageController extends Controller
 
 		$dims = $this->getImageDimensions($image);
 
-		if ($dims->width > $dims->height) {
+		$dimension = null;
 
-			$dims->height = intval($dims->height*$size/$dims->width);
-			$dims->width = $size;
+		if (preg_match('/[0-9]([a-z])$/', $size, $match)) {
 
-		}
-		else
-		{
-
-			$dims->width = intval($dims->width*$size/$dims->height);
-			$dims->height = $size;
+			$dimension = $match[1];
 
 		}
 
-		$image->resize($dims->height, $dims->width);
+		$size = (int)$size;
+
+		$width = null;
+		$height = null;
+
+		switch ($dimension) {
+
+			case 'w':
+
+				$width = $size;
+
+				break;
+
+			case 'h':
+
+				$height = $size;
+
+				break;
+
+			default:
+
+				if ($dims->width > $dims->height) {
+
+					$width = $size;
+
+				}
+				else
+				{
+
+					$height = $size;
+
+				}
+
+		}
+
+		if ($size > 0) {
+
+		    $image->resize($width, $height, function ($constraint) {
+
+		        $constraint->aspectRatio();
+		        $constraint->upsize();
+
+		    });
+
+		}
 
 		$this->putIntoStorage($img, $image->encode($type)->__toString());
 

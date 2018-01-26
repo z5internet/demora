@@ -5,6 +5,11 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
+var fs = require("fs");
+
+var contents = fs.readFileSync(__dirname+'/../../../../storage/ruf.json');
+var rufConfig = JSON.parse(contents);
+
 module.exports = {
 
   entry: {
@@ -86,6 +91,7 @@ module.exports = {
     new HtmlWebpackPlugin({
     	appMountId:'appRoot',
     	mobile:true,
+      title: rufConfig.title,
     	template: __dirname+'/resources/assets/template.html', // Load a custom template (ejs by default see the FAQ for details)
     }),
     new webpack.optimize.OccurrenceOrderPlugin(true),

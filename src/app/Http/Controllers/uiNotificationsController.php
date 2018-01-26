@@ -8,7 +8,7 @@ use Carbon\Carbon;
 
 use z5internet\ReactUserFramework\App\Http\Controllers\User\UserController;
 
-use z5internet\ReactUserFramework\App\Events\uiNotificationEvent;
+use z5internet\ReactUserFramework\App\Events\UiNotificationEvent;
 
 class uiNotificationsController extends Controller {
 
@@ -85,9 +85,11 @@ class uiNotificationsController extends Controller {
 
 	public function addNotification($notification) {
 
-		$notif = UiNotifications::firstOrNew(['id' => $notification->id, 'u' => $notification->uid]);
+		$notif = UiNotifications::firstOrNew(['nid' => $notification->nid, 'u' => $notification->uid]);
 
 		$notif->u = $notification->uid;
+
+		$notif->nid = $notification->nid;
 
 		$notif->i = $notification->image;
 
@@ -106,7 +108,7 @@ class uiNotificationsController extends Controller {
 		$notif->save();
 
 		$notification = [
-			'id' => $notification->id,
+			'id' => $notification->nid,
 			'b' => $notification->body,
 			'u' => $notification->uid,
 			'i' => $notification->image,
@@ -114,7 +116,7 @@ class uiNotificationsController extends Controller {
 			't' => date('Y-m-d H:i:s'),
 		];
 
-		event(new uiNotificationEvent($notification));
+		event(new UiNotificationEvent($notification));
 
 		return $notif;
 
@@ -122,7 +124,7 @@ class uiNotificationsController extends Controller {
 
 	public function markUiNotificationAsRead($nid, $uid) {
 
-		$notif = UiNotifications::firstOrNew(['id' => $nid, 'u' => $uid]);
+		$notif = UiNotifications::firstOrNew(['nid' => $nid, 'u' => $uid]);
 
 		$notif->r = 1;
 

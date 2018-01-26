@@ -55,8 +55,6 @@ class ReactUserFrameworkLaravelServiceProvider extends ServiceProvider
 
         $kernel->pushMiddleware(\z5internet\ReactUserFramework\App\Http\Middleware\RefreshToken::class);
 
-        $kernel->pushMiddleware(\z5internet\ReactUserFramework\App\Http\Middleware\CheckForReferralURL::class);
-
         $this->registerCommands();
 
         $this->app['config']->set('auth.guards.web.driver', 'rufJST');

@@ -101,8 +101,6 @@ class ReactUserFrameworkLumenServiceProvider extends ServiceProvider
 
         $this->app->middleware('z5internet\ReactUserFramework\App\Http\Middleware\AddRufParameterToJSONOutput');
 
-        $this->app->middleware('z5internet\ReactUserFramework\App\Http\Middleware\CheckForReferralURL');
-
         if (array_get($_SERVER, 'HTTP_ORIGIN') && explode('/', array_get($_SERVER, 'HTTP_ORIGIN'))[2] <> $_SERVER['HTTP_HOST']) {
 
             $this->app->middleware(\z5internet\ReactUserFramework\App\Http\Middleware\CorsMiddleware::class);

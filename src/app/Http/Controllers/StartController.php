@@ -12,6 +12,8 @@ use App\Http\Controllers\GetStarted\GetStartedController;
 
 use App\User;
 
+use stdClass;
+
 class StartController extends Controller {
 
 	public function __construct() {
@@ -22,7 +24,7 @@ class StartController extends Controller {
 
 	public function show($uid = null) {
 
-		$user = [];
+		$user = new stdClass;
 
 		$menu = [];
 
@@ -69,6 +71,8 @@ class StartController extends Controller {
 
 			$user->multiAccounts = $this->teamsController->getTeamsForUser();
 
+			$user->menu = $menu;
+
 		}
 
 		$out = [
@@ -77,7 +81,6 @@ class StartController extends Controller {
 				'name' => config('app.name'),
 				'signups' => !config('react-user-framework.website.disallow_public_signups'),
 				'multiAccounts' => config('react-user-framework.website.multiAccounts'),
-				'menu' => $menu,
                 'stripe_key' => config('react-user-framework.pay.stripe.publishable_key'),
                 'livePusher' => [
                 	'app_id' => config('broadcasting.connections.livePusher.app_id'),
