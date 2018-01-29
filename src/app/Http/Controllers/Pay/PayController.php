@@ -138,7 +138,7 @@ class PayController extends Controller {
 			else
 			{
 
-				$result = 'success';
+				$result = 'successful';
 
 			}
 
