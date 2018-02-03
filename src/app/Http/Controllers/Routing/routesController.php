@@ -65,6 +65,8 @@ class routesController extends Controller
 
 		$data["ref"] = $this->request->cookie('sou');
 
+		$data['email'] = strtolower($data['email']);
+
 		$j = UserController::joinFromSignupForm($data);
 
 		if (isset($j['errors'])) {
@@ -135,6 +137,8 @@ class routesController extends Controller
 
 		$data = $this->request->only('name','email','message');
 
+		$data['email'] = strtolower($data['email']);
+
 		return (new ContactController)->contactUs($data);
 
 	}
@@ -199,7 +203,7 @@ class routesController extends Controller
 
 	public function sendPasswordResetEmail(Request $request) {
 
-		(new ForgotPasswordController)->sendResetLinkEmail($request->input('email'));
+		(new ForgotPasswordController)->sendResetLinkEmail(strtolower($request->input('email')));
 		return ['data' => []];
 
 	}
@@ -217,6 +221,8 @@ class routesController extends Controller
 	public function resetPassword(Request $request) {
 
 		$data = $request->only(['email', 'token', 'password', 'password_confirmation']);
+
+		$data['email'] = strtolower($data['email']);
 
 		$result = (new ForgotPasswordController)->reset($data);
 

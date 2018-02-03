@@ -46,6 +46,8 @@ class settingsRoutes extends Controller
 			'team'	=> $request->input('team'),
 		];
 
+		$data['email'] = strtolower($data['email']);
+
 		$addTeamMember = $settingsController->addTeamMember($data);
 
 		if (isset($addTeamMember['error'])) {

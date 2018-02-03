@@ -37,7 +37,9 @@ class ContactController extends Controller
 			$id=0;
 
 			if (app('auth')->check()) {
-				app('auth')->user()->id;
+
+				$id = app('auth')->user()->id;
+
 			}
 
 	        app('mailer')->send('vendor.ruf.email.supportEmail', [
