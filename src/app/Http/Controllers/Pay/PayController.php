@@ -512,6 +512,18 @@ class PayController extends Controller {
 
 		$product->description = $data['description'];
 
+		$data = $data + [
+			'initial_payment_amount' => '',
+			'initial_payment_term' => '',
+			'initial_payment_quantity' => '',
+			'trial_period_card_required' => '',
+			'trial_period' => '',
+			'users_included' => '',
+			'amount_per_user' => '',
+			'auto_bill_for_extra_users' => '',
+
+		];
+
 		if (
 			$data['initial_payment_amount'] ||
 			$data['initial_payment_term'] ||
