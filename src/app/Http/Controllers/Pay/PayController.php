@@ -41,7 +41,7 @@ class PayController extends Controller {
 
 	}
 
-	public function addProductToTeam($teamId, $productId) {
+	public function checkAddProductToTeam($teamId, $productId) {
 
 		$rolesAllowed = config('react-user-framework.pay.roles_allowed_to_purchase');
 
@@ -85,7 +85,32 @@ class PayController extends Controller {
 
 		}
 
+		return [
+
+			'amount' => $getNextPriceTermForProduct->amount*(100+$product->tax)/100,
+			'currency' => $product->currency,
+
+		];
+
+	}
+
+	public function addProductToTeam($teamId, $productId) {
+
+		$checkAddProductToTeam = $this->checkAddProductToTeam($teamId, $productId);
+
+		if (!is_array($checkAddProductToTeam)) {
+
+			return $checkAddProductToTeam;
+
+		}
+
 		$result = false;
+
+		$product = $this->getProductFromProductId($productId);
+
+		$getNextPriceTermForProduct = $this->getNextPriceTermForProduct($product, 1);
+
+		$payment_details = $this->getPaymentInfo($teamId);
 
 		$ends = date('Y-m-d H:i:s', strtotime('+ '.$getNextPriceTermForProduct->term));
 		$now = date('Y-m-d H:i:s');

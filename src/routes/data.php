@@ -83,6 +83,8 @@ $this->route->group(['prefix' => 'data/payment'], function () {
 
 	$this->route->group(['middleware' => 'auth'], function () {
 
+		$this->route->post('/checkAddProduct/{productId}', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\payRoutes@checkAddProductToTeam');
+
 		$this->route->post('/addProduct/{productId}', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\payRoutes@addProductToTeam');
 
 		$this->route->group(['prefix' => 'stripe'], function () {

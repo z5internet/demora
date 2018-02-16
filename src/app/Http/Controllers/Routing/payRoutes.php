@@ -22,6 +22,16 @@ class payRoutes extends Controller {
 
 	}
 
+	public function checkAddProductToTeam($productId) {
+
+		$teamId = (new Team)->currentTeam();
+
+		$add = (new PayController)->checkAddProductToTeam($teamId, $productId);
+
+		return ['data' => ['result' => $add]];
+
+	}
+
 	public function addProductToTeam($productId) {
 
 		$teamId = (new Team)->currentTeam();
