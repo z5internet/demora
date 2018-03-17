@@ -278,7 +278,7 @@ class PayController extends Controller {
 
 	}
 
-	private function getPaymentInfo($teamId) {
+	public function getPaymentInfo($teamId) {
 
 		$db = PaymentDetails::where('team_id', $teamId);
 
@@ -334,7 +334,7 @@ class PayController extends Controller {
 
 	}
 
-	private function addUpateSubscriptionPlan($teamId, $product, $termPriceOfProduct) {
+	public function addUpateSubscriptionPlan($teamId, $product, $termPriceOfProduct) {
 
 		if ($product->product_group) {
 
@@ -599,7 +599,7 @@ class PayController extends Controller {
 
 	}
 
-	private function getNextPriceTermForProduct($product, $payment_number) {
+	public function getNextPriceTermForProduct($product, $payment_number) {
 
 		$return = new stdClass;
 		$return->trial_period_card_required = 1;
@@ -881,7 +881,7 @@ class PayController extends Controller {
 
 	}
 
-	private function getInvoiceDetailForUsers($product, $teamId, $now, $ends) {
+	public function getInvoiceDetailForUsers($product, $teamId, $now, $ends) {
 
 		$u = $this->getTotalAmountForUsers($product, $teamId);
 

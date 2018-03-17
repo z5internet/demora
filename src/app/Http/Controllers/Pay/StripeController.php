@@ -130,7 +130,7 @@ class StripeController extends Controller {
 
 		if (isset($payload->balance_transaction)) {
 
-#        	$payment = $this->recordPayment($payload);
+			$payment = $this->recordPayment($payload);
 
 			return true;
 
