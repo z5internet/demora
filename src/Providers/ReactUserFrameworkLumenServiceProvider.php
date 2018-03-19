@@ -31,7 +31,11 @@ class ReactUserFrameworkLumenServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/resources/views', 'react-user-framework');
 
-        class_alias('Pusher\Pusher', 'Pusher');
+        if (!class_exists('Pusher')) { // required for unit tests
+
+            class_alias('Pusher\Pusher', 'Pusher');
+
+        }
 
         $this->extendBroadcast();
 
