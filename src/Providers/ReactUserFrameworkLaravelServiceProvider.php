@@ -65,6 +65,8 @@ class ReactUserFrameworkLaravelServiceProvider extends ServiceProvider
 
         });
 
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations/');
+
     }
 
     /**

@@ -48,7 +48,6 @@ class install extends Command
 
         $scripts = collect([
             \z5internet\ReactUserFramework\installationFiles\scripts\config::class,
-            \z5internet\ReactUserFramework\installationFiles\scripts\migrations::class,
             \z5internet\ReactUserFramework\installationFiles\scripts\models::class,
             \z5internet\ReactUserFramework\installationFiles\scripts\controllers::class,
             \z5internet\ReactUserFramework\installationFiles\scripts\npm::class,
