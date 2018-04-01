@@ -45,7 +45,7 @@ class ReactUserFrameworkLumenServiceProvider extends ServiceProvider
 
         $this->registerCommands();
 
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations/');
+        $this->loadMigrationsFrom(__DIR__.'/../installationFiles/database/migrations/');
 
     }
 
