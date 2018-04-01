@@ -4,8 +4,6 @@ import { DropdownMenu, DropdownItem } from 'reactstrap';
 
 import { Link } from 'react-router-dom';
 
-//import FA from 'font-awesome/css/font-awesome.css';
-
 //let RightDropDownExtended = [(
 //    <DropdownItem key = 'new_item'>
 //      <Link to="/XX-XX">
