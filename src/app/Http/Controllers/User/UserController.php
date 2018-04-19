@@ -65,6 +65,12 @@ class UserController extends Controller {
 
 		$user = User::where('email', $credentials['email'])->first();
 
+		if (!$user) {
+
+			return null;
+
+		}
+
 		if (!app('hash')->check($credentials['password'], $user->password)) {
 
 			return null;
