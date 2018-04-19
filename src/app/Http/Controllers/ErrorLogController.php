@@ -13,7 +13,7 @@ class ErrorLogController extends Controller {
 		$db = new ErrorLog;
 
 		$db->url = $data['url'];
-		$db->uid = app('auth')->user()->id;
+		$db->uid = $data['uid'];
 		$db->stacktrace = $data['stacktrace'];
 		$db->created_at = app('db')->raw('now()');
 		$db->type = $data['type'];

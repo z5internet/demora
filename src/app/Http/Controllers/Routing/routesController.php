@@ -165,6 +165,14 @@ class routesController extends Controller
 
 		$data = $this->request->only('stacktrace', 'url', 'type')+['stacktrace' => '', 'url' => '', 'type' => ''];
 
+		$data['uid'] = 0;
+
+		if ($uid = app('auth')->id()) {
+
+			$data['uid'] = $uid;
+
+		}
+
 		(new ErrorLogController)->LogError($data);
 
 		return ['data' => []];

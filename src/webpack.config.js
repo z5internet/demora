@@ -95,6 +95,10 @@ module.exports = {
     	template: __dirname+'/resources/assets/template.html', // Load a custom template (ejs by default see the FAQ for details)
     }),
     new webpack.optimize.OccurrenceOrderPlugin(true),
+    new webpack.SourceMapDevToolPlugin({
+      filename: '[name]-[chunkhash].js.map',
+//      exclude: ['vendor.js']
+    }),
   ],
 
   recordsPath: path.join(__dirname, "../../../../webpack.records.json"),

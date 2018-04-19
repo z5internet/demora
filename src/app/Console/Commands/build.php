@@ -66,7 +66,7 @@ class build extends Command
 
         }
 
-        system("$node_env webpack --config ./vendor/z5internet/ruf/src/webpack.config.js");
+        system("$node_env webpack --config ".base_path('vendor/z5internet/ruf/src/webpack.config.js'));
 
         $assets_dir = base_path('public/assets');
 
