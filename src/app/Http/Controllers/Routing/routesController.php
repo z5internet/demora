@@ -8,8 +8,6 @@ use z5internet\ReactUserFramework\App\Http\Controllers\ContactController;
 
 use z5internet\ReactUserFramework\App\Http\Controllers\StartController;
 
-use z5internet\ReactUserFramework\App\Http\Controllers\ReferralsController;
-
 use z5internet\ReactUserFramework\App\Http\Controllers\Image\ImageController;
 
 use z5internet\ReactUserFramework\App\Http\Controllers\ErrorLogController;
@@ -152,12 +150,6 @@ class routesController extends Controller
 	public function createImage($img) {
 
 		return (new ImageController)->create($img);
-
-	}
-
-	public function referals() {
-
-		return (new ReferralsController)->show();
 
 	}
 

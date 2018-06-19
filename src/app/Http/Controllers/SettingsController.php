@@ -4,8 +4,6 @@ use z5internet\ReactUserFramework\App\Http\Controllers\Controller;
 
 use z5internet\ReactUserFramework\App\Http\Controllers\User\UserController;
 
-use App\User;
-
 use Mail;
 
 use z5internet\ReactUserFramework\App\ChangeEmail;
@@ -41,7 +39,7 @@ class SettingsController extends Controller
 
 	public function saveSettings($settings, $uid) {
 
-		$user = (new User)->find($uid);
+		$user = UserController::getUser($uid);
 
 		$keys = ['first_name','last_name'];
 
@@ -180,7 +178,7 @@ class SettingsController extends Controller
 			return [];
 		}
 
-		$checkIfEmailExists = User::where('email', $data['email'])->first();
+		$checkIfEmailExists = UserController::getUserByEmail($data['email']);
 
 		if ($checkIfEmailExists) {
 

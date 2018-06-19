@@ -2,6 +2,8 @@
 
 return [
 
+	'caching' => false,
+
 	'website' => [
 
 		'disallow_public_signups' => false,
@@ -29,6 +31,10 @@ return [
 		'username_required' => true,
 		'upload_profile_pic' => true,
 
+	],
+
+	'email' => [
+		'contact_us' => '',
 	],
 
 	'images' => [

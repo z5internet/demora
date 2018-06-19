@@ -12,6 +12,8 @@ $routes = [
 	'/privacy',
 	'/settings',
 	'/settings/{p}',
+	'/settings/multiAccounts/{team}',
+	'/settings/multiAccounts/{team}/{teamTab}',
 	'/setup',
 	'/setupExistingUser',
 	'/signup',

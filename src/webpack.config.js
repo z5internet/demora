@@ -71,6 +71,10 @@ module.exports = {
         from: __dirname+'/resources/images/',
         to: __dirname + '/../../../../public/assets/',
       },
+      {
+        from: __dirname+'/../../../../resources/assets/public/',
+        to: __dirname + '/../../../../public/assets/',
+      },
     ]),
     new webpack.optimize.CommonsChunkPlugin('vendor','vendor-[chunkhash].js'),
     new webpack.DefinePlugin({

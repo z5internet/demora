@@ -1,1 +1,0 @@
-"use strict";module.exports=function(t,e){return document.getElementsByClassName("navbarBottom")[0].offsetHeight+14};

@@ -19,7 +19,7 @@ class CreateErrorLogsTable extends Migration
             $table->bigInteger('uid');
             $table->string('type');
             $table->text('stacktrace');
-            $table->string('url');
+            $table->text('url');
             $table->timestamps();
 
         });

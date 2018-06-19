@@ -1,1 +1,0 @@
-"use strict";module.exports=function(){window.reduxStore.dispatch({type:"REFRESH_PAGE"})};

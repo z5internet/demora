@@ -38,7 +38,7 @@ class SetupController extends Controller
 
 		$checkJ = $checkJ->toArray();
 
-		$existingUser = User::where('email', $checkJ['email'])->first()?true:false;
+		$existingUser = UserController::getUserByEmail($checkJ['email'])?true:false;
 
 		$invited = $checkJ['team']?true:false;
 
@@ -150,7 +150,7 @@ class SetupController extends Controller
 
 		$referrer = null;
 
-		$rid = User::where('username', $ref["referrer"])->first(['id']);
+		$rid = UserController::getUserByUsername($ref['referrer']);
 
 		if ($rid) {
 

@@ -2,7 +2,7 @@
 
 use z5internet\ReactUserFramework\App\Http\Controllers\Controller;
 
-use App\User;
+use z5internet\ReactUserFramework\App\Http\Controllers\User\UserController;
 
 class ForgotPasswordController extends Controller
 {
@@ -56,7 +56,9 @@ class ForgotPasswordController extends Controller
 
         }
 
-        User::where('email', $this->email)->update(['password' => app('hash')->make($data['password'])]);
+        $u = UserContoller::getUserByEmail($this->email);
+
+        UserController::updateUser(['password' => app('hash')->make($data['password'])], $u->id);
 
         $this->deleteExisting();
 
@@ -137,7 +139,7 @@ class ForgotPasswordController extends Controller
 
         if (!$this->user) {
 
-            $this->user = User::where('email', $this->email)->first();
+            $this->user = UserController::getUserByEmail($this->email);
 
         }
 

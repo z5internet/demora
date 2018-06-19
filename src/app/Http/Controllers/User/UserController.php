@@ -8,6 +8,8 @@ use z5internet\ReactUserFramework\App\Http\Controllers\SetupController;
 
 use z5internet\ReactUserFramework\App\Http\Controllers\Auth\AuthenticationController;
 
+use z5internet\ReactUserFramework\App\Http\Controllers\User\AdditionalUserData;
+
 use Redirect;
 
 use z5internet\ReactUserFramework\App\Joined;
@@ -17,8 +19,6 @@ use App\User;
 use tokenAuth;
 
 use Illuminate\Http\Request;
-
-use Validator;
 
 use z5internet\User\Models\passwordResets;
 
@@ -49,13 +49,73 @@ class UserController extends Controller {
 
 		$u->image = $image;
 
+		foreach (AdditionalUserData::getData($uid) as $k => $v) {
+
+			$u->$k = $v;
+
+		}
+
 		return $u;
+
+	}
+
+	private static function cacheKey($uid) {
+
+		return 'user-'.$uid;
 
 	}
 
 	public static function getUser($uid) {
 
-		return User::find($uid);
+		if (!config('react-user-framework.caching')) {
+
+			return User::find($uid);
+
+		}
+
+		return app('cache')->rememberForever(self::cacheKey($uid), function() use ($uid) {
+
+			return User::find($uid);
+
+		});
+
+	}
+
+	private static function forgetFromCache($uid) {
+
+		if (!config('react-user-framework.caching')) {
+
+			return;
+
+		}
+
+		app('cache')->forget(self::cacheKey($uid));
+
+	}
+
+	public static function getUserByEmail($email) {
+
+		$uid = User::where('email', $email)->first();
+
+		if (!$uid) {
+
+			return null;
+
+		}
+
+		return self::getUser($uid->id);
+
+	}
+
+	public static function getUserByUsername($username) {
+
+		$uid = self::getIdFromUsername($username);
+
+		if ($uid) {
+
+			return self::getUser($uid);
+
+		}
 
 	}
 
@@ -63,7 +123,7 @@ class UserController extends Controller {
 
 		$credentials = $request->only('email', 'password');
 
-		$user = User::where('email', $credentials['email'])->first();
+		$user = self::getUserByEmail($credentials['email']);
 
 		if (!$user) {
 
@@ -83,7 +143,7 @@ class UserController extends Controller {
 
 	public static function loginUsingId($uid) {
 
-		$user = User::find($uid);
+		$user = self::getUser($uid);
 
 		return self::doLoginFromUser($user);
 
@@ -141,7 +201,7 @@ class UserController extends Controller {
 
 		}
 
-		$check	=	User::where('email', $data['email'])->get(['id'])->toArray();
+		$check = self::getUserByEmail($data['email'])->toArray();
 
 		if (count($check)>0) {
 
@@ -270,11 +330,13 @@ class UserController extends Controller {
 
 		$user->save();
 
+		self::forgetFromCache($user->id);
+
 		return $user->id;
 
 	}
 
-	public static function updateUser($userData,$id) {
+	public static function updateUser($userData, $id) {
 
 		$user = self::getUser($id);
 
@@ -286,28 +348,15 @@ class UserController extends Controller {
 
 		$user->save();
 
+		self::forgetFromCache($user->id);
+
 		return;
-
-	}
-
-	public static function returnUser($obj) {
-
-		return [
-
-			"n"	=>	[
-
-				$obj => self::getUser($obj),
-
-			],
-
-		];
-
 
 	}
 
 	public static function getIdFromUsername($username) {
 
-		$u = User::where("username","=",$username)->first(['id']);
+		$u = User::where('username', $username)->first(['id']);
 
 		if ($u) {
 
@@ -368,144 +417,4 @@ class UserController extends Controller {
 
 	}
 
-	public static function processLoginToken($data) {
-
-		$token	=	tokenAuth::attempt(['email' => $data["email"], 'password' => $data["password"]]);
-
-		if (!is_array($token)) {
-
-			return $token;
-
-		}
-
-		return self::checkLoginWithToken($token["token"]);
-
-	}
-
-
-	public static function checkLoginWithToken($token=null) {
-
-		if (!tokenAuth::check()) {
-
-			return [];
-
-		}
-
-		$response = ['data' => [
-			'user' => self::user(),
-		]];
-
-		if ($token) {
-
-			$response['data']['user']['token'] = $token;
-
-		}
-
-		return $response;
-
-	}
-
-/**
-    public static function sendResetLinkEmail($data) {
-
-		$data		=	$data	+	["email"=>""];
-
-		$validator = Validator::make(
-
-			['email'	=>	$data["email"]],
-			['email'	=>	'required|email']
-
-		);
-
-		if ($validator->fails()) {
-
-			return [
-				"errors"=>[
-					[
-						'message' => "You didn't type your email address correctly, please try again."
-					]
-				]
-			];
-
-		}
-
-		$user	=	User::process("first_name",array("email=?",[$data["email"]]))[0];
-
-		$token	=	md5($data["email"].microtime());
-
-		passwordResets::process([
-
-			"email"	=>	$data["email"],
-
-			"token"	=>	$token
-
-		]);
-
-		$data=array(
-
-			"first_name"	=>	$user['first_name'],
-			"email"			=>	$data['email'],
-			"link"			=>	"http://".Utils::hostname(1).config('dm.user.returnAddresses.newPassword')."?token=".$token
-
-		);
-
-		Mail::send('user::emails.sendPassword', $data, function($message) Use ($data) {
-
-			$message->to($data["email"], $data['first_name'])->subject('Verify your '.config('dm.user.websiteName').' email address.');
-
-		});
-
-		return ["success"=>"If we have your email address on file we'll send you an email within 1 minute. If you don't receive an email, please check your email address and then check your junk/spam folder."];
-
-    }
-
-    **/
-
-/**
-	public static function resetPassword($data) {
-
-		$data =	$data	+	["token"=>"","password1"=>"","password2"=>""];
-
-		$setupController =	new SetupController;
-
-		if ($data["password1"] <> $data["password2"]) {
-
-			return ["error"	=>	"The 2 passwords you typed don't match."];
-
-		}
-
-		if ($setupController->passwordNotValid($data["password1"])) {
-
-			return ["error"	=>	$setupController->passwordNotValid($data["password"])];
-
-		}
-
-		$email		=	passwordResets::process("email",[
-
-			"token=?",	[$data["token"]]
-
-		])[0]["email"];
-
-		if (!$email) {
-
-			return ["error"	=>	"The reset link you are using has expired, please click on Forgotten password to request a new link."];
-
-		}
-
-		if ($email) {
-
-			User::tran("users",[
-
-				"password"	=>	app('hash')->make($data["password1"])
-
-			],["email=?",[$email]]);
-
-			passwordResets::process("delete",["email=?",[$email]]);
-
-		}
-
-		return ["success"	=>	"Your password has been changed."];
-
-	}
-	**/
 }

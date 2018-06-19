@@ -56,7 +56,7 @@ class ContactController extends Controller
 
 	            $message->subject(substr($data["message"],0,40)."...");
 
-	            $message->to(config('mail.from.address'));
+	            $message->to(config('react-user-framework.email.contact_us'));
 
         	});
 

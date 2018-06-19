@@ -127,6 +127,8 @@ class uiNotificationsController extends Controller {
 		$notif = UiNotifications::firstOrNew(['nid' => $nid, 'u' => $uid]);
 
 		$notif->r = 1;
+		$notif->nid = $nid;
+		$notif->u = $uid;
 
 		$notif->updated_at = app('db')->raw((new Carbon($notif->updated_at))->subSecond());
 

@@ -25,7 +25,6 @@ trait ServiceProviderHelpers {
 
         require __DIR__.'/../routes/web.php';
         require __DIR__.'/../routes/data.php';
-        require __DIR__.'/../routes/mobile.php';
         require __DIR__.'/../routes/channels.php';
 
     }

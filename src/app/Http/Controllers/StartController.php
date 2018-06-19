@@ -10,8 +10,6 @@ use z5internet\ReactUserFramework\App\Http\Controllers\Teams\TeamsController;
 
 use App\Http\Controllers\GetStarted\GetStartedController;
 
-use App\User;
-
 use stdClass;
 
 class StartController extends Controller {
@@ -60,7 +58,7 @@ class StartController extends Controller {
 
 			$user->finishedGetStarted = (new GetStartedController)->hasUserCompletedStartup();
 
-			$user->email = User::find($uid)->email;
+			$user->email = UserController::getUser($uid)->email;
 
 			$user->currentTeam = [
 
