@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('image',100);
             $table->bigInteger('referrer')->unsigned()->nullable();
-            $table->string('referred_url')->nullable();
+            $table->text('referred_url')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

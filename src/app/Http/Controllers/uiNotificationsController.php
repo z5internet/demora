@@ -10,6 +10,8 @@ use z5internet\ReactUserFramework\App\Http\Controllers\User\UserController;
 
 use z5internet\ReactUserFramework\App\Events\UiNotificationEvent;
 
+use stdClass;
+
 class uiNotificationsController extends Controller {
 
 	public function showNotifications($uid, $endCursor) {
@@ -28,7 +30,7 @@ class uiNotificationsController extends Controller {
 
 		$notif = $notif->take($limit);
 
-		$notif = $notif->get(['id', 'nid', 'u', 'i', 'b', 'r', 'l', app('db')->raw('updated_at as t')]);
+		$notif = $notif->get(['id', 'nid', 'u', 'i', 'b', 'r', 'l', app('db')->raw('created_at as t')]);
 
 		$out = [];
 
@@ -64,9 +66,15 @@ class uiNotificationsController extends Controller {
 
 		}
 
+		if (count($out) == 0) {
+
+			$out = new stdClass;
+
+		}
+
 		$out = ['uiNotifications' => [
 
-			'notifications' => array_values($out),
+			'notifications' => $out,
 			'endCursor' => $endCursor,
 
 		]];
@@ -101,19 +109,20 @@ class uiNotificationsController extends Controller {
 
 		}
 
-		$notif->updated_at = Carbon::now();
+		$notif->created_at = Carbon::now();
 
 		$notif->r = 0;
 
 		$notif->save();
 
 		$notification = [
-			'id' => $notification->nid,
+			'nid' => $notification->nid,
 			'b' => $notification->body,
 			'u' => $notification->uid,
 			'i' => $notification->image,
 			'l' => $notification->link,
 			't' => date('Y-m-d H:i:s'),
+			'r' => $notif->r,
 		];
 
 		event(new UiNotificationEvent($notification));
@@ -124,15 +133,29 @@ class uiNotificationsController extends Controller {
 
 	public function markUiNotificationAsRead($nid, $uid) {
 
-		$notif = UiNotifications::firstOrNew(['nid' => $nid, 'u' => $uid]);
+		$notif = UiNotifications::where('nid', $nid)->where('u', $uid)->first();
+
+		if (!$notif) {
+
+			return [];
+
+		}
 
 		$notif->r = 1;
-		$notif->nid = $nid;
-		$notif->u = $uid;
-
-		$notif->updated_at = app('db')->raw((new Carbon($notif->updated_at))->subSecond());
 
 		$notif->save();
+
+		$notification = [
+			'nid' => $notif->nid,
+			'b' => json_decode($notif->b, true),
+			'u' => $notif->u,
+			'i' => $notif->i,
+			'l' => $notif->l,
+			't' => $notif->created_at,
+			'r' => $notif->r,
+		];
+
+		event(new UiNotificationEvent($notification));
 
 		return [
 			$notif->id => [

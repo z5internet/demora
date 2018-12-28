@@ -31,7 +31,7 @@ class AddForeignKeyToPasswordResetsTable extends Migration
     {
 		Schema::table('password_resets', function($table) {
 
-			$table->dropForeign('app_managers');
+			$table->dropForeign('email');
 
 		});
     }

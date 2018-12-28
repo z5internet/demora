@@ -5,6 +5,14 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const { ImageminWebpackPlugin } = require("imagemin-webpack");
+const imageminGifsicle = require("imagemin-gifsicle");
+const imageminManifest = {};
+
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+var os = require('os')
+
 var fs = require("fs");
 
 var contents = fs.readFileSync(__dirname+'/../../../../storage/ruf.json');
@@ -103,6 +111,23 @@ module.exports = {
       filename: '[name]-[chunkhash].js.map',
 //      exclude: ['vendor.js']
     }),
+/*
+    new ImageminWebpackPlugin({
+      cache: true,
+      bail: false, // Ignore errors on corrupted images
+      loader: false,
+      imageminOptions: {
+        plugins: [imageminGifsicle()]
+      },
+      manifest: imageminManifest, // This object will contain source and interpolated filenames
+      maxConcurrency: os.cpus().length - 1,
+      name: "[hash].[ext]",
+      test: /\.(jpe?g|png|gif|svg)$/i,
+      include: undefined,
+      exclude: undefined
+    }),
+    new BundleAnalyzerPlugin(),
+*/
   ],
 
   recordsPath: path.join(__dirname, "../../../../webpack.records.json"),

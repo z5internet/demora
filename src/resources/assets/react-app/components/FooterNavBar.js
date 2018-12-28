@@ -3,15 +3,27 @@ import { Link } from 'react-router-dom';
 
 class FooterNavBar extends Component {
 
-  render() {
-    return (
-          <ul className="nav navbar-nav">
-            <li className="nav-item"><Link to="/terms" className="nav-link">Terms</Link></li>
-            <li className="nav-item"><Link to="/privacy" className="nav-link">Privacy</Link></li>
-            <li className="nav-item"><Link to="/contact" className="nav-link">Contact us</Link></li>
-          </ul>);
+	render() {
 
-  }
+        let cols = 'col-4';
+
+		return (<div style={{ flexGrow:1 }}>
+			<div className="d-flex">
+				<div className="row text-center mx-auto">
+					<div className={cols}>
+						<Link to="/contact" className="text-white">Contact</Link>
+					</div>
+					<div className={cols}>
+						<Link to="/terms" className="text-white">Terms</Link>
+					</div>
+					<div className={cols}>
+						<Link to="/privacy" className="text-white">Privacy</Link>
+					</div>
+				</div>
+			</div>
+		</div>);
+
+	}
 
 }
 

@@ -26,6 +26,10 @@ use z5internet\ReactUserFramework\App\Http\Controllers\Auth\AuthenticationContro
 
 use Symfony\Component\HttpFoundation\Cookie;
 
+use z5internet\ReactUserFramework\App\Events;
+
+use Carbon\Carbon;
+
 class routesController extends Controller
 {
 
@@ -36,6 +40,12 @@ class routesController extends Controller
 	}
 
 	public function start() {
+
+		if ($uid = app('auth')->id()) {
+
+			Events::insert(['uid' => $uid, 'event' => 1, 'created_at' => new Carbon]);
+
+		}
 
 		return ['data' => (new StartController)->show()];
 
@@ -77,10 +87,10 @@ class routesController extends Controller
 
 	}
 
-	public function referer($refer) {
+	public function referer($refer, $redirectTo = '/', $referral_url = null) {
 
 		$sou = [
-			'r' => array_get($_SERVER, 'HTTP_REFERER'),
+			'r' => $referral_url?$referral_url:array_get($_SERVER, 'HTTP_REFERER'),
 			'u' => $refer,
 		];
 
@@ -110,7 +120,7 @@ class routesController extends Controller
 
 		}
 
-		return redirect('/')->withCookie(new Cookie(
+		return redirect($redirectTo)->withCookie(new Cookie(
 			'sou',
 			json_encode($sou),
 		    time()+(60*60*24*365),
@@ -261,7 +271,7 @@ class routesController extends Controller
 
 		return ['data' => [
 
-			'uploaded' => (new uploadImageController)->uploadChunk($this->getImageSliceParams($request)),
+			'uploaded' => (new UploadImageController)->uploadChunk($this->getImageSliceParams($request)),
 			'feed' => [],
 
 		]];
@@ -272,7 +282,7 @@ class routesController extends Controller
 
 		return ['data' => [
 
-			'uploaded' => (new uploadImageController)->checkIfUploadedChunkExists($this->getImageSliceParams($request)),
+			'uploaded' => (new UploadImageController)->checkIfUploadedChunkExists($this->getImageSliceParams($request)),
 
 		]];
 

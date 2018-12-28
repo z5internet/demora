@@ -163,7 +163,7 @@ class ImageController extends Controller
 
 	public function cropImage($crop,$prefix='') {
 
-		$image = app('image')->make($this->retrieveImage(app('auth')->user()->image));
+		$image = app('image')->make($this->retrieveImage('0'.$this->imageObjectToString(json_decode(app('auth')->user()->image))));
 
 		$type = preg_replace('/image\//','',$image->mime());
 

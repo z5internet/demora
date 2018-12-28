@@ -47,12 +47,6 @@ class ReactUserFrameworkLaravelServiceProvider extends ServiceProvider
 
         $kernel->pushMiddleware('z5internet\ReactUserFramework\App\Http\Middleware\AddRufParameterToJSONOutput');
 
-        if (array_get($_SERVER, 'HTTP_ORIGIN')) {
-
-            $kernel->pushMiddleware(\z5internet\ReactUserFramework\App\Http\Middleware\CorsMiddleware::class);
-
-        }
-
         $kernel->pushMiddleware(\z5internet\ReactUserFramework\App\Http\Middleware\RefreshToken::class);
 
         $this->registerCommands();

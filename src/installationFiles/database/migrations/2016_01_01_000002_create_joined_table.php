@@ -17,7 +17,7 @@ class CreateJoinedTable extends Migration
             $table->string('first_name',100);
             $table->string('email');
             $table->string('code');
-            $table->string('ref')->nullable();
+            $table->text('ref')->nullable();
             $table->bigInteger('team')->unsigned()->nullable();
             $table->tinyInteger('teamRole')->unsigned()->nullable();
             $table->timestamp('created_at')->nullable();

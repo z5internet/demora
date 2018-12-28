@@ -2,10 +2,10 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class InvoiceDetail extends Model {
+class PasswordResets extends Model {
 
  	public $timestamps = false;
 
-	protected $table = "invoice_detail";
+	protected $table = "password_resets";
 
 }

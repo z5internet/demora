@@ -318,7 +318,7 @@ class PayController extends Controller {
 
 			foreach(array_keys($invdet->notes) as $action) {
 
-				if ($action=='product') {
+				if ($action=='product' && ($invdet->unit_amount * $invdet->quantity > 0)) {
 
 					$this->updateEndDateForSubscription($invdet->team_id, $invdet->notes['product'], $invdet->period_to);
 

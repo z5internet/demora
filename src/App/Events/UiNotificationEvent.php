@@ -19,13 +19,17 @@ class UiNotificationEvent implements ShouldBroadcast {
 
     public $users;
 
-    private $id;
+    private $nid;
+
+    private $uid;
 
     public function __construct($notification) {
 
-        $this->id = $notification['id'];
+        $this->nid = $notification['nid'];
 
-        $this->uiNotifications = [$this->id => $notification];
+        $this->uid = $notification['u'];
+
+        $this->uiNotifications = ['notifications' => [$this->nid => $notification]];
 
         $users = [];
 
@@ -45,7 +49,7 @@ class UiNotificationEvent implements ShouldBroadcast {
 
 	public function broadcastOn()
     {
-        return new PrivateChannel('USER_'.$this->uiNotifications[$this->id]['u']);
+        return new PrivateChannel('USER_'.$this->uid);
     }
 
     public function broadcastAs()

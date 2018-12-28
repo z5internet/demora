@@ -24,11 +24,21 @@ use z5internet\User\Models\passwordResets;
 
 use stdClass;
 
+use Egulias\EmailValidator\EmailValidator;
+
+use Egulias\EmailValidator\Validation\RFCValidation;
+
 class UserController extends Controller {
 
 	public static function user($uid) {
 
 		$user = self::getUser($uid);
+
+		if (!$user) {
+
+			return;
+
+		}
 
 		$u = new stdClass;
 
@@ -81,7 +91,7 @@ class UserController extends Controller {
 
 	}
 
-	private static function forgetFromCache($uid) {
+	public static function forgetFromCache($uid) {
 
 		if (!config('react-user-framework.caching')) {
 
@@ -185,6 +195,18 @@ class UserController extends Controller {
 
 		}
 
+		if (!(new EmailValidator)->isValid($data['email'], new RFCValidation())) {
+
+			return [
+				'errors' => [
+					[
+						'message' => 'The email address you entered is not valid, please check the email address you entered.',
+					],
+				],
+			];
+
+		}
+
 		$cookie	=	self::decodeReferralCookieAndCheckReferrer($data['ref']);
 
 		if (!$cookie["referrer"] && config('react-user-framework.joinMustHaveReferral')) {
@@ -201,9 +223,9 @@ class UserController extends Controller {
 
 		}
 
-		$check = self::getUserByEmail($data['email'])->toArray();
+		$check = self::getUserByEmail($data['email']);
 
-		if (count($check)>0) {
+		if ($check) {
 
 			$message	=	'Your email address is already registered. If you have forgotten your password you can click on forgotten password to receive a new one.';
 
@@ -340,6 +362,8 @@ class UserController extends Controller {
 
 		$user = self::getUser($id);
 
+		unset($user->token);
+
 		foreach ($userData as $k => $v) {
 
 			$user->$k	=	$v;
@@ -354,15 +378,27 @@ class UserController extends Controller {
 
 	}
 
+	private static $idsOfUsernames = [];
+
 	public static function getIdFromUsername($username) {
+
+		if ($uid = array_get(self::$idsOfUsernames, $username)) {
+
+			return $uid;
+
+		}
 
 		$u = User::where('username', $username)->first(['id']);
 
 		if ($u) {
 
+			self::$idsOfUsernames[$username] = $u->id;
+
 			return $u->id;
 
 		}
+
+		self::$idsOfUsernames[$username] = null;
 
 	}
 

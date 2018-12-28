@@ -6,9 +6,27 @@ use Illuminate\Http\Request;
 
 use z5internet\ReactUserFramework\App\Http\Controllers\Pay\PayController;
 
+use z5internet\ReactUserFramework\App\Http\Controllers\Admin\AdminController;
+
 class adminRoutes extends Controller {
 
+	public function __construct() {
+
+		$this->adminController = new AdminController;
+
+		$this->uid = app('auth')->user()->id;
+
+	}
+
+	public function hasAccess($service) {
+
+		$this->adminController->doesUserHaveAccessToAdminService($this->uid, $service);
+
+	}
+
 	public function getProducts() {
+
+		$this->hasAccess('products');
 
 		return ['data' => [
 
@@ -19,6 +37,8 @@ class adminRoutes extends Controller {
 	}
 
 	public function createProduct(Request $request) {
+
+		$this->hasAccess('products');
 
 		$newProduct = (new PayController)->createProduct($request->only([
 			'product_id',
@@ -60,6 +80,8 @@ class adminRoutes extends Controller {
 	}
 
 	public function editProduct(Request $request) {
+
+		$this->hasAccess('products');
 
 		$product = $request->only([
 			'product_id',

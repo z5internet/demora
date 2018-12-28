@@ -10,9 +10,15 @@ use z5internet\ReactUserFramework\App\ChangeEmail;
 
 use z5internet\ReactUserFramework\App\Joined;
 
+use z5internet\ReactUserFramework\App\PasswordResets;
+
 use z5internet\ReactUserFramework\App\Http\Controllers\Image\ImageController;
 
 use z5internet\ReactUserFramework\App\Http\Controllers\Teams\TeamsController;
+
+use z5internet\ReactUserFramework\App\Http\Controllers\StartController;
+
+use Carbon\Carbon;
 
 class SettingsController extends Controller
 {
@@ -27,7 +33,7 @@ class SettingsController extends Controller
 		else
 		{
 
-			$filename = (new ImageController)->cropProfileImage($crop,'p');
+			$filename = (new ImageController)->cropImage($crop,'p');
 
 		}
 
@@ -63,6 +69,22 @@ class SettingsController extends Controller
 
 			if ($email <> $user['email']) {
 
+				$check = UserController::getUserByEmail($email);
+
+				if ($check) {
+
+					return ['errors' => [
+
+						[
+
+							'message' => 'Your email address is already being used and cannot be used on this account.',
+
+						],
+
+					]];
+
+				}
+
 				$code	=	md5($email.microtime());
 
 				$db = new ChangeEmail;
@@ -70,6 +92,7 @@ class SettingsController extends Controller
 				$db->uid = $uid;
 				$db->code = $code;
 				$db->email = $email;
+				$db->created_at = new Carbon();
 
 				$db->save();
 
@@ -79,11 +102,11 @@ class SettingsController extends Controller
 
 					"first_name"	=>	$user['first_name'],
 					"email"			=>	$email,
-					"link"			=>	'http://'.config('react-user-framework.website.domain')."/settings/changeEmail?id=".$id."&code=".$code."&email=".$email
+					"link"			=>	config('app.url')."/settings/changeEmail?id=".$id."&code=".$code."&email=".urlencode($email),
 
 				);
 
-				Mail::send('vendor.ruf.email.registeredEmail', $data, function($message) Use ($data) {
+				app('mailer')->send('vendor.ruf.email.registeredEmail', $data, function($message) Use ($data) {
 
 					$message->to($data["email"], $data['first_name'])->subject('Verify your '.config('app.name').' email address.');
 
@@ -105,11 +128,13 @@ class SettingsController extends Controller
 
 				if ($user->email <> $email) {
 
-					$ce = $ce[0];
+					PasswordResets::where('email', $user->email)->delete();
 
-					$user->email = $ce->email;
+					ChangeEmail::where('email', $email)->delete();
 
-#					ChangeEmail::where('email',$email)->delete();
+					$user->email = $email;
+
+					joined::where('email', $email)->delete();
 
 				}
 
@@ -156,7 +181,9 @@ class SettingsController extends Controller
 
 		$user->save();
 
-		$ret = ["data" => ["user" => UserController::user($uid)]];
+		UserController::forgetFromCache($uid);
+
+		$ret = ["data" => (new StartController)->show($uid)];
 
 		if ($error) {
 

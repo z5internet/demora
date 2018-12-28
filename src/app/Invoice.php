@@ -3,7 +3,9 @@
 use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model {
- 
+
 	protected $table = "invoices";
-	
+
+	protected $fillable = ['converted_total', 'total'];
+
 }

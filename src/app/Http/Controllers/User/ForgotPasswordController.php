@@ -4,6 +4,8 @@ use z5internet\ReactUserFramework\App\Http\Controllers\Controller;
 
 use z5internet\ReactUserFramework\App\Http\Controllers\User\UserController;
 
+use z5internet\ReactUserFramework\App\PasswordResets;
+
 class ForgotPasswordController extends Controller
 {
 
@@ -56,7 +58,7 @@ class ForgotPasswordController extends Controller
 
         }
 
-        $u = UserContoller::getUserByEmail($this->email);
+        $u = UserController::getUserByEmail($this->email);
 
         UserController::updateUser(['password' => app('hash')->make($data['password'])], $u->id);
 
@@ -113,7 +115,7 @@ class ForgotPasswordController extends Controller
 
     private function getDB() {
 
-        return app('db')->table('password_resets');
+        return new PasswordResets();
 
     }
 

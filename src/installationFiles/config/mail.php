@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'support@cashjuice.com', 'name' => 'CashJuice'],
+    'from' => ['address' => '', 'name' => ''],
 
     /*
     |--------------------------------------------------------------------------

@@ -42,7 +42,7 @@ class LivePusherBroadcaster extends Broadcaster
 
         if (Str::startsWith($channel_name, ['private-', 'presence-']) &&
             ! $request->user()) {
-            throw new HttpException(403);
+            throw new HttpException(401);
         }
 
         $channelName = Str::startsWith($channel_name, 'private-')

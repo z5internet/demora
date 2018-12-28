@@ -10,10 +10,6 @@ use z5internet\ReactUserFramework\App\Joined;
 
 use App\User;
 
-use z5internet\ReactUserFramework\App\Teams;
-
-use z5internet\ReactUserFramework\App\TeamUsers;
-
 class SetupController extends Controller
 {
 
@@ -38,7 +34,13 @@ class SetupController extends Controller
 
 		$checkJ = $checkJ->toArray();
 
-		$existingUser = UserController::getUserByEmail($checkJ['email'])?true:false;
+		$existingUser = false;
+
+		if (config('react-user-framework.website.multiAccounts') && UserController::getUserByEmail($checkJ['email'])) {
+
+			$existingUser = true;
+
+		}
 
 		$invited = $checkJ['team']?true:false;
 
@@ -82,6 +84,8 @@ class SetupController extends Controller
 	}
 
 	public function checkUsername($username) {
+
+		$username = trim($username);
 
 		$check	=	UserController::getIdFromUsername($username);
 
@@ -148,16 +152,6 @@ class SetupController extends Controller
 
 		$ref = UserController::decodeReferralCookieAndCheckReferrer($j["ref"]);
 
-		$referrer = null;
-
-		$rid = UserController::getUserByUsername($ref['referrer']);
-
-		if ($rid) {
-
-			$referrer = $rid->id;
-
-		}
-
 		$data = [
 
 			"first_name" => $origData["first_name"],
@@ -165,14 +159,14 @@ class SetupController extends Controller
 			"username" => null,
 			"password" => $origData["password"],
 			"gender" =>	$origData["gender"],
-			"referrer" => $referrer,
+			"referrer" => $ref['referrer'],
 			"referred_url" => $ref["referred_url"]
 
 		];
 
 		if (config('react-user-framework.setup.username_required')) {
 
-			$data['username'] = $origData['username'];
+			$data['username'] = trim($origData['username']);
 
 		}
 
@@ -226,9 +220,9 @@ class SetupController extends Controller
 
 		$return		=	null;
 
-		if (strlen($password)<6 || preg_match("/[^a-zA-Z0-9]/",$password)) {
+		if (strlen($password) < 6) {
 
-			$return	=	"Your password should be at least 6 characters long and only contain letters A to Z and number 0 to 9.";
+			$return	=	"Your password should be at least 6 characters long.";
 
 		}
 

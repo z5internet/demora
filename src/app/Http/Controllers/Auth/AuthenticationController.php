@@ -36,6 +36,16 @@ class AuthenticationController extends Controller {
 
 	}
 
+	public function checkLoggedIn() {
+
+		if (!$this->checkAuthentication()) {
+
+			abort(401);
+
+		}
+
+	}
+
 	public function checkAuthentication() {
 
 		if ($this->token) {
@@ -44,13 +54,20 @@ class AuthenticationController extends Controller {
 
 				$payload = app('tymon.jwt.auth')->setToken($this->token)->getPayload();
 
-		    } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+		    } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
 
 				$token = $this->refreshToken();
 
 				$this->token = $token;
 
+				if (!$this->token) {
+
+					return;
+
+				}
+
 				$payload = app('tymon.jwt.auth')->setToken($token)->getPayload();
+
 
 			} catch (\Exception $e) {
 
@@ -114,15 +131,15 @@ class AuthenticationController extends Controller {
 
 	private function getToken() {
 
-		if ($token = $this->getTokenFromCookie()) {
+		if ($token = $this->getTokenFromHeader()) {
 
-			$this->cookieOrHeader = 'cookie';
+			$this->cookieOrHeader = 'header';
 
 			$this->token = $token;
 
-		} else if ($token = $this->getTokenFromHeader()) {
+		} else if ($token = $this->getTokenFromCookie()) {
 
-			$this->cookieOrHeader = 'header';
+			$this->cookieOrHeader = 'cookie';
 
 			$this->token = $token;
 
@@ -140,7 +157,7 @@ class AuthenticationController extends Controller {
 
 	private function getTokenFromHeader() {
 
-		return $this->decryptToken((new AuthHeaders)->parse($this->request));
+		return (new AuthHeaders)->parse($this->request);
 
 	}
 
@@ -178,24 +195,7 @@ class AuthenticationController extends Controller {
 
 			return $this->jwt->refresh();
 
-		} catch (\Exception $e) {
-
-			$cookieSettings = $this->getCookieSettings();
-
-			header('Location: /login');
-
-			setCookie(
-			    'rufT',
-				null,
-				-1,
-			    '/',
-			    $this->getDomain(),
-			    $cookieSettings['secure'],
-			    true
-			);
-			exit;
-
-		}
+		} catch (\Exception $e) {}
 
 	}
 

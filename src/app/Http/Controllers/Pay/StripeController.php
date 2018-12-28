@@ -41,16 +41,7 @@ class StripeController extends Controller {
 
 	public function saveStripeToken($teamId, $token) {
 
-		// Create a Customer
-		$customer = Customer::create([
-
-		  'source' => $token['id'],
-		  'description' => $this->stripe_config['description'],
-		  'metadata' => [
-		  	'id' => $teamId,
-		  ]
-
-		]);
+		$customer = $this->createCustomerFromToken($token, $teamId);
 
 		$pd = new stdClass;
 
@@ -62,20 +53,44 @@ class StripeController extends Controller {
 
 	}
 
+	public function createCustomerFromToken($token, $teamId) {
+
+		$customer = Customer::create([
+
+		  'source' => $token['id'],
+		  'description' => $this->stripe_config['description'],
+		  'metadata' => [
+		  	'id' => $teamId,
+		  ]
+
+		]);
+
+		return $customer;
+
+	}
+
 	public function processPayment($data, $invoice_detail_ids) {
 
-		$subscription_id = PaymentDetails::where('team_id', $data['team_id']);
-		$subscription_id = $subscription_id->where('processor', 'Stripe')->first(['subscription_id'])->subscription_id;
+		$token = PaymentDetails::where('team_id', $data['team_id'])
+			->where('processor', 'Stripe')->first(['subscription_id'])->subscription_id;
 
-		$charge = Charge::create(array(
+		return $this->processStripePaymentWithToken($data, $invoice_detail_ids, $token);
+
+	}
+
+	public function processStripePaymentWithToken($data, $invoice_detail_ids, $token) {
+
+		$charge = Charge::create([
+
 		  'amount'   => $data['amount'],
 		  'currency' => $data['currency'],
-		  'customer' => $subscription_id,
+		  'customer' => $token,
 		  'metadata' => [
 		  	'teamId' => $data['team_id'],
 		  	'invoice_detail_ids' => json_encode($invoice_detail_ids),
-		  ]
-		));
+		  ],
+
+		]);
 
 		if (!$charge->failure_message) {
 

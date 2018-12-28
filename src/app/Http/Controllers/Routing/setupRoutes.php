@@ -39,13 +39,13 @@ class setupRoutes extends Controller
 
 		$data	=	[
 
-			"first_name" => $request->input("first_name"),
+			"first_name" => trim($request->input("first_name")),
 
-			"last_name" => $request->input("last_name"),
+			"last_name" => trim($request->input("last_name")),
 
 			"password" => $request->input("password1"),
 
-			"username" => $request->input("username"),
+			"username" => trim($request->input("username")),
 
 			"code" => $request->input("code"),
 
@@ -53,7 +53,7 @@ class setupRoutes extends Controller
 
 			"gender" => $request->input("gender"),
 
-			"teamName" => $request->input("teamName"),
+			"teamName" => trim($request->input("teamName")),
 
 		];
 

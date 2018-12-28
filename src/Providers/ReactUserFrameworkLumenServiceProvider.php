@@ -103,15 +103,9 @@ class ReactUserFrameworkLumenServiceProvider extends ServiceProvider
 
     private function registerMiddleware() {
 
-        $this->app->routeMiddleware(['auth' => 'z5internet\ReactUserFramework\App\Http\Middleware\Authenticate']);
+        $this->app->routeMiddleware(['auth' => \z5internet\ReactUserFramework\App\Http\Middleware\Authenticate::class]);
 
-        $this->app->middleware('z5internet\ReactUserFramework\App\Http\Middleware\AddRufParameterToJSONOutput');
-
-        if (array_get($_SERVER, 'HTTP_ORIGIN') && explode('/', array_get($_SERVER, 'HTTP_ORIGIN'))[2] <> $_SERVER['HTTP_HOST']) {
-
-            $this->app->middleware(\z5internet\ReactUserFramework\App\Http\Middleware\CorsMiddleware::class);
-
-        }
+        $this->app->middleware(\z5internet\ReactUserFramework\App\Http\Middleware\AddRufParameterToJSONOutput::class);
 
         $this->app->middleware(\z5internet\ReactUserFramework\App\Http\Middleware\RefreshToken::class);
 

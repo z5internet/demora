@@ -18,6 +18,7 @@ $routes = [
 	'/setupExistingUser',
 	'/signup',
 	'/terms',
+	'/notifications',
 
 ];
 

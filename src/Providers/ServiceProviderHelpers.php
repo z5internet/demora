@@ -42,7 +42,6 @@ trait ServiceProviderHelpers {
         ]);
 
         $schedule = $this->app->make(Schedule::class);
-        $schedule->command('react-user-framework:deleteFromPush')->everyMinute();
         $schedule->command('react-user-framework:stripeRepeatBilling')->dailyAt('12:00');
 
     }

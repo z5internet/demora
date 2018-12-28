@@ -17,6 +17,7 @@ class ErrorLogController extends Controller {
 		$db->stacktrace = $data['stacktrace'];
 		$db->created_at = app('db')->raw('now()');
 		$db->type = $data['type'];
+		$db->server_vars = json_encode($_SERVER);
 
 		$db->save();
 

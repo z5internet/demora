@@ -15,10 +15,7 @@ return [
     |
     */
 
-    'default' => (
-        env('CACHE_DRIVER', 'memcached')<>'memcached'
-        || 1 ||
-        ((env('CACHE_DRIVER', 'memcached')=='memcached') && class_exists('Memcached')))?env('CACHE_DRIVER', 'memcached'):'file', // stop errors running artisan on mac command line without Memcached
+    'default' => 'array',
 
     /*
     |--------------------------------------------------------------------------

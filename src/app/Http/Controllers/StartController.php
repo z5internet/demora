@@ -71,6 +71,12 @@ class StartController extends Controller {
 
 			$user->menu = $menu;
 
+			if ($adminServices = (new AdminController)->getAdminServicesForUser($uid)) {
+
+				$user->admin = $adminServices;
+
+			}
+
 		}
 
 		$out = [
