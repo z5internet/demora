@@ -56,12 +56,6 @@ class build extends Command
 
                 mkdir($dir);
 
-                foreach (['admin', 'auth'] as $ta) {
-
-                    mkdir($dir.'/'.$ta);
-
-                }
-
             }
 
         }
@@ -76,13 +70,13 @@ class build extends Command
 
             $old = $assets_dir.'/'.$ta;
 
-            if (is_dir($old) && !preg_match("/\./", $ta)) {
+            if (preg_match("/^prot\-/", $ta)) {
 
                 $new = base_path('assets/'.$ta);
 
-                $this->recurse_copy($old, $new);
+                rename($old, $new);
 
-                $this->deleteDir($old);
+                unset($old);
 
             }
 
@@ -104,7 +98,6 @@ class build extends Command
                     recurse_copy($src . '/' . $file,$dst . '/' . $file);
                 }
                 else {
-                    copy($src . '/' . $file,$dst . '/' . $file);
                 }
             }
         }

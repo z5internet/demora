@@ -220,9 +220,9 @@ class TeamsController extends Controller {
 
 		$db->save();
 
-		$this->forgetTeamUser($db->id, $owner);
-
 		$tid = $db->id;
+
+		$this->forgetTeamUser($tid, $owner);
 
 		$this->addTeamMember($tid, $owner, 255);
 
@@ -352,11 +352,15 @@ class TeamsController extends Controller {
 
 		if ($uid) {
 
+/*
+
 			if (!is_array($uid)) {
 
 				$uid = [$uid];
 
 			}
+
+*/
 
 			$this->forgetTeamsForUser($uid);
 

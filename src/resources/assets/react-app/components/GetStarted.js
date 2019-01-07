@@ -9,4 +9,4 @@ class GetStarted extends Component {
 
 }
 
-module.exports = GetStarted;
+export default GetStarted;

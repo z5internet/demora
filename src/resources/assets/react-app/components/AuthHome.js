@@ -12,4 +12,4 @@ class AuthHome extends Component {
   }
 }
 
-module.exports = AuthHome;
+export default AuthHome;

@@ -14,4 +14,4 @@ import { Link } from 'react-router-dom';
 
 let RightDropDownExtended = [];
 
-module.exports = RightDropDownExtended;
+export default RightDropDownExtended;

@@ -1,15 +1,19 @@
 var fs = require('fs')
 var path = require('path')
 var webpack = require('webpack')
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 const { ImageminWebpackPlugin } = require("imagemin-webpack");
 const imageminGifsicle = require("imagemin-gifsicle");
 const imageminManifest = {};
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+const devMode = process.env.NODE_ENV !== 'production'
 
 var os = require('os')
 
@@ -32,45 +36,143 @@ module.exports = {
     publicPath: '/assets/'
   },
 
+  mode: 'production',
+
   module: {
-    loaders: [
-     {
+    rules: [{
         test: /.jsx?$/,
+        exclude: /(node_modules)/,
         loader: 'babel-loader',
-        exclude: /node_modules/,
-        query: {
-          presets:[ 'es2015', 'react', 'stage-2' ],
+        options: {
+          presets: [
+            [
+              '@babel/preset-env', {
+                modules: false
+              }
+            ],
+            '@babel/react',
+          ],
+          'plugins': [
+            '@babel/plugin-proposal-class-properties',
+            '@babel/plugin-syntax-dynamic-import'
+          ]
         }
       },
       {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-      },
-      {
-        test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
+          test: /\.s?[ac]ss$/,
+          use: [
+              MiniCssExtractPlugin.loader,
+              {
+                loader: 'css-loader',
+                options: {
+                  url: true,
+                  sourceMap: true
+                }
+              },
+              {
+                loader: 'sass-loader',
+                options: {
+                  sourceMap: true
+                }
+              }
+          ],
       },
       {
         test: /\.png|\.gif$/,
-        loader: "url-loader?limit=100000"
+        use: [
+
+          {
+
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+
+            }
+          }
+
+        ]
       },
       {
         test: /\.jpg$/,
-        loader: "file-loader"
+        use: [
+
+          {
+
+            loader: 'url-loader'
+
+          }
+
+        ]
       },
       {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: "url-loader?limit=10000&mimetype=application/font-woff"
+
+        test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: 'url-loader?limit=10000'
+
       },
       {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: "file-loader"
+
+        test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
+        use: 'file-loader'
+
       },
       {
-        test: /\.json$/,
-        loader: 'json-loader'
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+
+          {
+
+            loader: 'file-loader'
+
+          }
+
+        ]
+      },      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+
+          {
+
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              name: './svg-[hash].[ext]',
+              mimetype: 'image/svg+xml'
+            }
+
+          }
+
+        ]
       }
+
     ]
+
+  },
+
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true // set to true if you want JS source maps
+      }),
+      new OptimizeCSSAssetsPlugin({
+        cssProcessorPluginOptions: {
+          preset: ['default', { discardComments: { removeAll: true } }],
+        },
+      })
+    ],
+    splitChunks: {
+      chunks: 'all',
+      minSize: 30000,
+      maxSize: 0,
+      minChunks: 2,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      automaticNameDelimiter: '~',
+      name: true,
+      cacheGroups: {}
+    }
   },
 
   plugins: [
@@ -84,22 +186,15 @@ module.exports = {
         to: __dirname + '/../../../../public/assets/',
       },
     ]),
-    new webpack.optimize.CommonsChunkPlugin('vendor','vendor-[chunkhash].js'),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     }),
-    (function() {
-      return process.env.NODE_ENV=='production'?new webpack.optimize.UglifyJsPlugin({
-        compress: {
-            warnings: false,
-        },
-        sourceMap: true,
-        mangle: true,
-        beautify: false,
-        comments: false,
-      }):function(){};
-    })(),
-    new ExtractTextPlugin("[name]-[chunkhash].css"),
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: "[name]-[chunkhash].css",
+      chunkFilename: "[id]-[chunkhash].css"
+    }),
     new HtmlWebpackPlugin({
     	appMountId:'appRoot',
     	mobile:true,
@@ -109,25 +204,7 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin(true),
     new webpack.SourceMapDevToolPlugin({
       filename: '[name]-[chunkhash].js.map',
-//      exclude: ['vendor.js']
     }),
-/*
-    new ImageminWebpackPlugin({
-      cache: true,
-      bail: false, // Ignore errors on corrupted images
-      loader: false,
-      imageminOptions: {
-        plugins: [imageminGifsicle()]
-      },
-      manifest: imageminManifest, // This object will contain source and interpolated filenames
-      maxConcurrency: os.cpus().length - 1,
-      name: "[hash].[ext]",
-      test: /\.(jpe?g|png|gif|svg)$/i,
-      include: undefined,
-      exclude: undefined
-    }),
-    new BundleAnalyzerPlugin(),
-*/
   ],
 
   recordsPath: path.join(__dirname, "../../../../webpack.records.json"),
@@ -139,7 +216,7 @@ module.exports = {
       TagBlock: path.resolve( __dirname, '../../ruf-tag/src/resources/assets/js/src/components/TagBlock'),
       resources: path.resolve( __dirname, '../../../../resources'),
     },
-    extensions: [ '', '.js' ]
+    extensions: [ '.js' ]
   },
 
 }

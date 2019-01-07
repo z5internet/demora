@@ -10,4 +10,4 @@ class PreHeader extends Component {
 
 }
 
-module.exports = PreHeader;
+export default PreHeader;

@@ -29,7 +29,7 @@ class TopNavBarRight extends Component {
 
 }
 
-module.exports = TopNavBarRight;
+export default TopNavBarRight;
 
 
 

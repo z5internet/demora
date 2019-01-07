@@ -20,4 +20,4 @@ class TopNavBarLeft extends Component {
 
 }
 
-module.exports = TopNavBarLeft;
+export default TopNavBarLeft;

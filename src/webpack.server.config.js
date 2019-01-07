@@ -1,9 +1,11 @@
 var fs = require('fs')
 var path = require('path')
 var webpack = require('webpack')
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+
+const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports = {
 
@@ -18,68 +20,178 @@ module.exports = {
     publicPath: '/assets/'
   },
 
+  mode: 'development',
+
   module: {
-    loaders: [
-     {
+    rules: [{
         test: /.jsx?$/,
+        exclude: /(node_modules)/,
         loader: 'babel-loader',
-        exclude: /node_modules/,
-        query: {
-          presets:[ 'es2015', 'react', 'stage-2' ],
+        options: {
+          presets: [
+            [
+              '@babel/preset-env', {
+                modules: false
+              }
+            ],
+            '@babel/react',
+          ],
+          'plugins': [
+            '@babel/plugin-proposal-class-properties',
+            '@babel/plugin-syntax-dynamic-import'
+          ]
         }
       },
       {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-      },
-      {
-        test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
+          test: /\.s?[ac]ss$/,
+          use: [
+              MiniCssExtractPlugin.loader,
+              {
+                loader: 'css-loader',
+                options: {
+                  url: true,
+                  sourceMap: true
+                }
+              },
+              {
+                loader: 'sass-loader',
+                options: {
+                  sourceMap: true
+                }
+              }
+          ],
       },
       {
         test: /\.png|\.gif$/,
-        loader: "url-loader?limit=100000"
+        use: [
+
+          {
+
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+
+            }
+          }
+
+        ]
       },
       {
         test: /\.jpg$/,
-        loader: "url-loader"
+        use: [
+
+          {
+
+            loader: 'url-loader'
+
+          }
+
+        ]
       },
       {
-        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=application/font-woff'
+
+        test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: [
+
+          {
+
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+
+            }
+          }
+
+        ]
+
       },
       {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=application/octet-stream'
+
+        test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
+        use: [
+
+          {
+              loader: 'file-loader',
+              options: {
+                  name: '[name]-[hash:6].[ext]'
+              },
+          }
+
+        ]
       },
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file'
+        use: [
+
+          {
+              loader: 'file-loader',
+              options: {
+                  name: '[name]-[hash:6].[ext]'
+              },
+          }
+
+        ]
       },
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=image/svg+xml'
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
+        use: [
+
+          {
+
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              name: './svg-[hash].[ext]',
+              mimetype: 'image/svg+xml'
+            }
+
+          }
+
+        ]
       }
+
     ]
+
+  },
+
+  optimization: {
+    splitChunks: {
+      chunks: 'async',
+      minSize: 30000,
+      maxSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      automaticNameDelimiter: '~',
+      name: 'shared',
+      cacheGroups: {
+        node_vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10
+        },
+        vendors: {
+          test: /[\\/]vendor[\\/]/,
+          priority: -10
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true
+        }
+      }
+    }
   },
 
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin('shared.js'),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     }),
-    (function() {
-      return process.env.NODE_ENV=='production'?new webpack.optimize.UglifyJsPlugin({
-        compress: {
-            warnings: false
-        }
-      }):function(){};
-    })(),
-    new ExtractTextPlugin("[name].css"),
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: "[name].css",
+      chunkFilename: "[id].css"
+    }),
     new CopyWebpackPlugin([
         {from: __dirname+'/resources/images', to: ''}
     ]),
@@ -94,7 +206,7 @@ module.exports = {
       TagBlock: path.resolve( __dirname, '../../ruf-tag/src/resources/assets/js/src/components/TagBlock'),
       resources: path.resolve( __dirname, '../../../../resources'),
     },
-    extensions: [ '', '.js' ]
+    extensions: [ '.js' ]
   },
 
 }

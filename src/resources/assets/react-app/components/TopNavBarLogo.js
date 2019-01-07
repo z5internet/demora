@@ -10,4 +10,4 @@ class TopNavBarLogo extends Component {
 
 }
 
-module.exports = TopNavBarLogo;
+export default TopNavBarLogo;

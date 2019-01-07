@@ -2,4 +2,4 @@
 let customSettings = [];
 
 
-module.exports = customSettings;
+export default customSettings;

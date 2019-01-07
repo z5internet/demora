@@ -1,4 +1,4 @@
 let customUserDetails = [];
 
 
-module.exports = customUserDetails;
+export default customUserDetails;

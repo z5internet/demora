@@ -16,4 +16,4 @@ class Privacy extends Component {
 
 }
 
-module.exports = Privacy;
+export default Privacy;

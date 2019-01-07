@@ -27,4 +27,4 @@ class FooterNavBar extends Component {
 
 }
 
-module.exports = FooterNavBar;
+export default FooterNavBar;

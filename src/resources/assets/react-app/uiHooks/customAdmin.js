@@ -2,4 +2,4 @@
 let customAdmin = [];
 
 
-module.exports = customAdmin;
+export default customAdmin;

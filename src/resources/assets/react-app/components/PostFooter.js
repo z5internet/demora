@@ -10,4 +10,4 @@ class PostFooter extends Component {
 
 }
 
-module.exports = PostFooter;
+export default PostFooter;

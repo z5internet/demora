@@ -2,7 +2,7 @@
 
 import Promise from 'promise';
 
-module.exports = function() {
+export default function() {
 
 	var promise = new Promise(function (resolve, reject) {
 
@@ -16,4 +16,4 @@ module.exports = function() {
 
 **/
 
-module.exports = null;
+export default null;

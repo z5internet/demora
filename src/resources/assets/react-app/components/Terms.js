@@ -16,4 +16,4 @@ class Terms extends Component {
 
 }
 
-module.exports = Terms;
+export default Terms;
