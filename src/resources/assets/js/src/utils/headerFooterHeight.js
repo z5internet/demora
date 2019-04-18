@@ -1,1 +1,0 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=function(e,t){return{header:document.getElementsByClassName("navbarTop")[0].offsetHeight+14,footer:document.getElementsByClassName("navbarBottom")[0].offsetHeight+14}};

@@ -1,1 +1,0 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var Gender=[{name:"Male",him:"him",his:"his"},{name:"Female",him:"her",his:"her"}];exports.default=Gender;

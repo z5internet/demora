@@ -1,1 +1,0 @@
-"use strict";function _interopRequireDefault(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(exports,"__esModule",{value:!0});var _showModal=require("./showModal"),_showModal2=_interopRequireDefault(_showModal),errorModal=function(e){return(0,_showModal2.default)("Error",e)};exports.default=errorModal;
