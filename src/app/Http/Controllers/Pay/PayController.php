@@ -286,6 +286,16 @@ class PayController extends Controller {
 
 	}
 
+	public function getPaymentInfoForProcessor($teamId, $processor) {
+
+		$db = PaymentDetails::where('team_id', $teamId);
+
+		$db = $db->where('processor', $processor);
+
+		return $db->first(['id', 'subscription_id']);
+
+	}
+
 	public function recordPayment(Invoice $invoice, $paymentForDetailLines) {
 
 		$check = Invoice::where('transaction_id', $invoice->transaction_id);
@@ -686,6 +696,7 @@ class PayController extends Controller {
 			}
 
 			$numberInvoices = InvoiceDetail::where('product_id', $product->product_id);
+			$numberInvoices = $numberInvoices->where('team_id', $product->team_id);
 			$numberInvoices = $numberInvoices->whereNull('invoice_id')->count();
 
 			if ($numberInvoices > 0) {
@@ -923,6 +934,12 @@ class PayController extends Controller {
 		}
 
 		$apu = $product->amount_per_user;
+
+		if (!is_array($apu)) {
+
+			return [];
+
+		}
 
 		$steps = array_keys($apu);
 

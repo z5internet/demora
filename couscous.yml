@@ -1,0 +1,21 @@
+template:
+    directory: website
+
+include:
+    - docs
+
+exclude:
+    - src
+    - tests
+    - website
+
+scripts:
+    before:
+        - lessc --clean-css website/less/main.less website/css/all.min.css
+
+baseUrl: http://demora.io
+cname: demora.io
+
+menu:
+    items:
+

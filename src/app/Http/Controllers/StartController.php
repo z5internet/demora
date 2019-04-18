@@ -12,6 +12,8 @@ use App\Http\Controllers\GetStarted\GetStartedController;
 
 use stdClass;
 
+use z5internet\ReactUserFramework\App\Http\Controllers\uiNotificationsController;
+
 class StartController extends Controller {
 
 	public function __construct() {
@@ -31,6 +33,10 @@ class StartController extends Controller {
 			$uid = app('auth')->id();
 
 		}
+
+		$users = null;
+
+		$uiNotifications = null;
 
 		if ($uid) {
 
@@ -77,22 +83,50 @@ class StartController extends Controller {
 
 			}
 
+			$uin = (new uiNotificationsController)->showNotifications($uid, null);
+
+			$uiNotifications = $uin['uiNotifications'];
+
+			$users = $uin['users'];
+
 		}
 
 		$out = [
+
 			'user' => $user,
-			'website' => [
-				'name' => config('app.name'),
-				'signups' => !config('react-user-framework.website.disallow_public_signups'),
-				'multiAccounts' => config('react-user-framework.website.multiAccounts'),
-                'stripe_key' => config('react-user-framework.pay.stripe.publishable_key'),
-                'livePusher' => [
-                	'app_id' => config('broadcasting.connections.livePusher.app_id'),
-                ],
-			],
+			'website' => $this->getWebsiteInfo(),
+
 		];
 
+		if ($uiNotifications) {
+
+			$out['uiNotifications'] = $uiNotifications;
+
+		}
+
+		if ($users) {
+
+			$out['users'] = $users;
+
+		}
+
 		return $out;
+
+	}
+
+	public function getWebsiteInfo() {
+
+		return [
+
+			'name' => config('app.name'),
+			'signups' => !config('react-user-framework.website.disallow_public_signups'),
+			'multiAccounts' => config('react-user-framework.website.multiAccounts'),
+			'stripe_key' => config('react-user-framework.pay.stripe.publishable_key'),
+			'livePusher' => [
+				'app_id' => config('broadcasting.connections.livePusher.app_id'),
+			],
+
+		];
 
 	}
 

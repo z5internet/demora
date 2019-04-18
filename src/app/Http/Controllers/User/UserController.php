@@ -20,19 +20,27 @@ use tokenAuth;
 
 use Illuminate\Http\Request;
 
-use z5internet\User\Models\passwordResets;
-
 use stdClass;
 
 use Egulias\EmailValidator\EmailValidator;
 
 use Egulias\EmailValidator\Validation\RFCValidation;
 
+use z5internet\ReactUserFramework\App\Http\Controllers\User\Login\ThrottlesLogins;
+
+use z5internet\ReactUserFramework\App\Events\LoginFailedAttempt;
+
+use z5internet\ReactUserFramework\App\Events\LoginSuccessful;
+
+use z5internet\ReactUserFramework\App\Http\Controllers\User\Login\TwoFactorAuth;
+
 class UserController extends Controller {
 
 	public static function user($uid) {
 
-		$user = self::getUser($uid);
+		$userC = self::getUserFromCache($uid);
+
+		$user = $userC['user'];
 
 		if (!$user) {
 
@@ -48,6 +56,12 @@ class UserController extends Controller {
 		$u->gender = $user->gender;
 		$u->username = $user->username;
 
+		if (isset($user->online) && !(($user->online + 300) < time())) {
+
+			$u->o = true;
+
+		}
+
 		$image = new stdClass;
 
 		if ($user->image) {
@@ -59,7 +73,7 @@ class UserController extends Controller {
 
 		$u->image = $image;
 
-		foreach (AdditionalUserData::getData($uid) as $k => $v) {
+		foreach ($userC['additional'] as $k => $v) {
 
 			$u->$k = $v;
 
@@ -71,23 +85,42 @@ class UserController extends Controller {
 
 	private static function cacheKey($uid) {
 
+		$uid = explode('-', $uid)[0];
+
 		return 'user-'.$uid;
 
 	}
 
 	public static function getUser($uid) {
 
+		return self::getUserFromCache($uid)['user'];
+
+	}
+
+	public static function getUserFromCache($uid) {
+
 		if (!config('react-user-framework.caching')) {
 
-			return User::find($uid);
+			return self::getUserFromCacheDB($uid);
 
 		}
 
 		return app('cache')->rememberForever(self::cacheKey($uid), function() use ($uid) {
 
-			return User::find($uid);
+			return self::getUserFromCacheDB($uid);
 
 		});
+
+	}
+
+	public static function getUserFromCacheDB($uid) {
+
+		return [
+
+			'user' => User::find($uid),
+			'additional' => AdditionalUserData::getData($uid),
+
+		];
 
 	}
 
@@ -131,21 +164,73 @@ class UserController extends Controller {
 
 	public static function login($request) {
 
+		$ThrottlesLogins = new ThrottlesLogins;
+
 		$credentials = $request->only('email', 'password');
+
+		if ($ThrottlesLogins->hasTooManyLoginAttempts($request)) {
+
+			$ThrottlesLogins->fireLockoutEvent($request);
+
+			return 'You have made too many login attempts. Please wait before trying again.';
+
+		}
 
 		$user = self::getUserByEmail($credentials['email']);
 
-		if (!$user) {
+		if ($user && app('hash')->check($credentials['password'], $user->password)) {
 
-			return null;
+			if ($twofa = (new TwoFactorAuth)->send2FAIfRequired($user)) {
+
+				return ['twofa' => $twofa];
+
+			}
+
+			return self::loginSuccessful($user);
 
 		}
 
-		if (!app('hash')->check($credentials['password'], $user->password)) {
+		$ThrottlesLogins->incrementLoginAttempts($request);
 
-			return null;
+		$checkAttemptsLeft = $ThrottlesLogins->checkAttemptsLeft($request)+1;
+
+		event(new LoginFailedAttempt($request, $checkAttemptsLeft));
+
+		if ($checkAttemptsLeft < 3) {
+
+			return 'Incorrect Login Details. You only have '.$checkAttemptsLeft.' attempts left';
 
 		}
+
+		return 'Incorrect Login Details';
+
+	}
+
+	public static function Confirm2FA($request) {
+
+		$credentials = $request->only('email', 'password', 'code');
+
+		$user = self::getUserByEmail($credentials['email']);
+
+		if ($user && app('hash')->check($credentials['password'], $user->password)) {
+
+			if (!(new TwoFactorAuth)->checkCodeIsValid($user->id, $credentials['code'])) {
+
+				return false;
+
+			}
+
+			return self::loginSuccessful($user);
+
+		}
+
+	}
+
+	private static function loginSuccessful($user) {
+
+		event(new LoginSuccessful($user));
+
+		(new ThrottlesLogins)->clearLoginAttempts(app('request'));
 
 		return self::doLoginFromUser($user);
 
@@ -175,11 +260,17 @@ class UserController extends Controller {
 
 	}
 
-	public static function returnLoginHeaders($request, $token, $content) {
+	public static function returnLoginHeaders($request, $token, $content, $twofa = false) {
 
 		$response = response('', 200);
 
 		$response->withCookie((new AuthenticationController($request))->cookie($token));
+
+		if ($twofa) {
+
+			$response->withCookie((new TwoFactorAuth)->createCookie($content['data']['user']->id));
+
+		}
 
 		$response->setContent(collect($content));
 
@@ -362,6 +453,8 @@ class UserController extends Controller {
 
 		$user = self::getUser($id);
 
+		unset($user->online);
+
 		unset($user->token);
 
 		foreach ($userData as $k => $v) {
@@ -446,6 +539,31 @@ class UserController extends Controller {
 				$out['referred_url'] = $cookie['r'];
 
 			}
+
+		}
+
+		return $out;
+
+	}
+
+	public static function setOnline($uid) {
+
+		$u = self::getUserFromCache($uid);
+
+		$u['user']->online = time();
+
+		app('cache')->put(self::cacheKey($uid), $u, 3600);
+
+	}
+
+	public static function getManyCacheKeysForUsers(array $uids) {
+
+		$out = [];
+
+		foreach ($uids as $uid) {
+
+			array_push($out, self::cacheKey($uid));
+
 
 		}
 

@@ -26,7 +26,11 @@ class AuthenticationController extends Controller {
 
 		$this->request = $request;
 
-		$this->getToken();
+		if (!$request->input('noLogin')) {
+
+			$this->getToken();
+
+		}
 
 		if ($this->token) {
 

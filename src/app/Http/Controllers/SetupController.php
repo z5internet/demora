@@ -10,6 +10,8 @@ use z5internet\ReactUserFramework\App\Joined;
 
 use App\User;
 
+use z5internet\ReactUserFramework\App\Http\Controllers\User\ForgotPasswordController;
+
 class SetupController extends Controller
 {
 
@@ -216,20 +218,6 @@ class SetupController extends Controller
 
 	}
 
-	public function passwordNotValid($password) {
-
-		$return		=	null;
-
-		if (strlen($password) < 6) {
-
-			$return	=	"Your password should be at least 6 characters long.";
-
-		}
-
-		return $return;
-
-	}
-
 	public function setupExistingUser($data) {
 
 		$j = joined::where('id', '=', $data['id'])
@@ -279,9 +267,9 @@ class SetupController extends Controller
 
 		}
 
-		if ($this->passwordNotValid($origData["password"])) {
+		if ($p = (new ForgotPasswordController)->passwordNotValid($origData["password"])) {
 
-			$error = $this->passwordNotValid($origData["password"]);
+			$error = $p;
 
 		}
 

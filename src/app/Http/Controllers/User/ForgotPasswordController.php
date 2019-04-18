@@ -6,6 +6,8 @@ use z5internet\ReactUserFramework\App\Http\Controllers\User\UserController;
 
 use z5internet\ReactUserFramework\App\PasswordResets;
 
+use z5internet\ReactUserFramework\App\Http\Controllers\User\Login\ThrottlesLogins;
+
 class ForgotPasswordController extends Controller
 {
 
@@ -46,9 +48,11 @@ class ForgotPasswordController extends Controller
         $this->email = $data['email'];
         $this->token = $data['token'];
 
-        if ($data['password'] <> $data['password_confirmation']) {
+        $pwd = $data['password'];
 
-            return 'invalid_password';
+        if ($p = $this->passwordNotValid($pwd)) {
+
+            return $p;
 
         }
 
@@ -64,7 +68,49 @@ class ForgotPasswordController extends Controller
 
         $this->deleteExisting();
 
+        (new ThrottlesLogins)->clearLoginAttempts(app('request'));
+
         return 'reset';
+
+    }
+
+    public function passwordNotValid($pwd) {
+
+        $return = [];
+
+        $leng = 6;
+
+        if (strlen($pwd) < $leng) {
+
+            $return[] = 'Your password should be at least '.$leng.' characters long.';
+
+        }
+
+        if (!preg_match('#[0-9]+#', $pwd)) {
+
+            $return[] = 'Your password must include at least one number.';
+
+        }
+
+        if (!preg_match('#[a-zA-Z]+#', $pwd)) {
+
+            $return[] = 'Your password must include at least one letter.';
+
+        }
+
+        if (!preg_match('#[A-Z]+#', $pwd)) {
+
+            $return[] = 'Your password must include at least one uppercase letter A-Z.';
+
+        }
+
+        if (count($return) > 0) {
+
+            return join(' ', $return);
+
+        }
+
+        return null;
 
     }
 

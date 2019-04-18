@@ -12,6 +12,8 @@ use z5internet\ReactUserFramework\App\Events\UiNotificationEvent;
 
 use stdClass;
 
+use z5internet\ReactUserFramework\App\Http\Controllers\PreFetchCacheController;
+
 class uiNotificationsController extends Controller {
 
 	public function showNotifications($uid, $endCursor) {
@@ -20,17 +22,19 @@ class uiNotificationsController extends Controller {
 
 		$notif = UiNotifications::where('u', $uid);
 
-		$notif = $notif->orderBy('id', 'desc');
+		$notif = $notif->orderBy('updated_at', 'desc');
+
+		$notif = $notif->where('updated_at', '>', '2019-03-07 19:39:18');
 
 		if ($endCursor <> 0) {
 
-			$notif = $notif->where('id', '<', $endCursor);
+			$notif = $notif->where('updated_at', '<=', $endCursor);
 
 		}
 
 		$notif = $notif->take($limit);
 
-		$notif = $notif->get(['id', 'nid', 'u', 'i', 'b', 'r', 'l', app('db')->raw('created_at as t')]);
+		$notif = $notif->get(['id', 'nid', 'u', 'i', 'b', 'r', 'l', app('db')->raw('updated_at as t')]);
 
 		$out = [];
 
@@ -56,13 +60,13 @@ class uiNotificationsController extends Controller {
 
 		}
 
-		$endCursor = -1;
+		$endCursor = 0;
 
 		if ($notif->count() == $limit) {
 
 			$last = $notif->last();
 
-			$endCursor = $last->id;
+			$endCursor = $last->t;
 
 		}
 
@@ -80,6 +84,14 @@ class uiNotificationsController extends Controller {
 		]];
 
 		$out['users'] = [];
+
+		if (count($users) > 0) {
+
+			$keys = UserController::getManyCacheKeysForUsers(array_keys($users));
+
+			(new PreFetchCacheController)->fetch($keys);
+
+		}
 
 		foreach (array_keys($users) as $tu) {
 
@@ -151,7 +163,7 @@ class uiNotificationsController extends Controller {
 			'u' => $notif->u,
 			'i' => $notif->i,
 			'l' => $notif->l,
-			't' => $notif->created_at,
+			't' => $notif->created_at->toDateTimeString(),
 			'r' => $notif->r,
 		];
 

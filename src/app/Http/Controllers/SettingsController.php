@@ -45,7 +45,7 @@ class SettingsController extends Controller
 
 	public function saveSettings($settings, $uid) {
 
-		$user = UserController::getUser($uid);
+		$user = UserController::getUserFromCacheDB($uid)['user'];
 
 		$keys = ['first_name','last_name'];
 

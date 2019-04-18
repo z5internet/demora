@@ -8,6 +8,8 @@ $this->route->group(['prefix' => 'data'], function () {
 
 	$this->route->post('/auth', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@login');
 
+	$this->route->post('/twofa', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@Confirm2FA');
+
 	$this->route->post('/password/email', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@sendPasswordResetEmail');
 
 	$this->route->post('/password/reset', 'z5internet\ReactUserFramework\App\Http\Controllers\Routing\routesController@resetPassword');

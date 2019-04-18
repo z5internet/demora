@@ -74,9 +74,9 @@ class build extends Command
 
                 $new = base_path('assets/'.$ta);
 
-                rename($old, $new);
+//                rename($old, $new);
 
-                unset($old);
+//                unset($old);
 
             }
 

@@ -30,6 +30,8 @@ use z5internet\ReactUserFramework\App\Events;
 
 use Carbon\Carbon;
 
+use App\User;
+
 class routesController extends Controller
 {
 
@@ -53,17 +55,39 @@ class routesController extends Controller
 
 	public function login() {
 
-		$user = UserController::login($this->request);
+		$return = UserController::login($this->request);
+
+		if (is_string($return)) {
+
+			return ['errors' => [['message' => $return]]];
+
+		}
+
+		if (is_array($return)) {
+
+			return ['data' => $return];
+
+		}
+
+		$st = (new StartController)->show($return->id)['user'];
+
+		return UserController::returnLoginHeaders($this->request, $return->token, ['data' => ['user' => $st, 'token' => $return->token]]);
+
+	}
+
+	public function Confirm2FA() {
+
+		$user = UserController::Confirm2FA($this->request);
 
 		if (!$user) {
 
-			return ['errors' => [['message' => 'Incorrect Login Details']]];
+			return ['data' => []];
 
 		}
 
 		$st = (new StartController)->show($user->id)['user'];
 
-		return UserController::returnLoginHeaders($this->request, $user->token, ['data' => ['user' => $st, 'token' => $user->token]]);
+		return UserController::returnLoginHeaders($this->request, $user->token, ['data' => ['user' => $st, 'token' => $user->token]], !!$this->request->input('remember'));
 
 	}
 
@@ -246,12 +270,6 @@ class routesController extends Controller
 
 		switch($result) {
 
-			case 'invalid_password':
-
-				$error = 'There was a problem changing your password. Check your password matches.';
-
-				break;
-
 			case 'invalid_token_email':
 
 				$error = 'There was a problem changing your password. Please check your email address is typed correctly. If you are still having problems try requesting another password reset email.';
@@ -260,7 +278,8 @@ class routesController extends Controller
 
 			default:
 
-				$error = 'There was a problem changing your password.';
+				$error = $result;
+
 		}
 
 		return ['errors' => [['message' => $error]], 'data' => []];

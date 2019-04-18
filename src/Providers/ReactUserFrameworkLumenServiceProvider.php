@@ -37,8 +37,6 @@ class ReactUserFrameworkLumenServiceProvider extends ServiceProvider
 
         }
 
-        $this->extendBroadcast();
-
         $this->addRoutes();
 
         $this->registerMiddleware();
@@ -68,6 +66,8 @@ class ReactUserFrameworkLumenServiceProvider extends ServiceProvider
         $this->app->configure('mail');
 
         $this->app->configure('app');
+
+        $this->extendBroadcast();
 
         $key = 'jwt';
 
@@ -108,6 +108,8 @@ class ReactUserFrameworkLumenServiceProvider extends ServiceProvider
         $this->app->middleware(\z5internet\ReactUserFramework\App\Http\Middleware\AddRufParameterToJSONOutput::class);
 
         $this->app->middleware(\z5internet\ReactUserFramework\App\Http\Middleware\RefreshToken::class);
+
+        $this->app->middleware(\z5internet\ReactUserFramework\App\Http\Middleware\RecordUserOnline::class);
 
         $this->app->routeMiddleware(['IsUserAWebsiteAdminMiddleware' => \z5internet\ReactUserFramework\App\Http\Middleware\IsUserAWebsiteAdminMiddleware::class]);
 

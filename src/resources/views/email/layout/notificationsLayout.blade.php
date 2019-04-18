@@ -50,7 +50,8 @@ a {
   vertical-align: top;
 }
 
-.btn-primary td a {
+.btn-primary td a,
+.btn-primary td span {
   background-color: #348eda;
   border: solid 1px #348eda;
   border-radius: 25px;
