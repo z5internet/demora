@@ -13,7 +13,7 @@ scripts:
     before:
         - lessc --clean-css website/less/main.less website/css/all.min.css
 
-baseUrl: http://z5internet.github.io/demora
+baseUrl: https://z5internet.github.io/demora
 
 menu:
     items:
